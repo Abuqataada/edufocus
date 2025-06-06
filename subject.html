@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>AI Subject Assistant</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="subject.css">
+  <script src="https://js.puter.com/v2/"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="subject.js" defer></script>
+</head>
+<body>
+  <div class="app-container">
+    <div class="app-header">
+      <div class="subject-info">
+        <div class="subject-icon">
+          <i class="fas fa-book"></i>
+        </div>
+        <div class="subject-title">
+          <h1 id="subject-title">AI Subject Assistant</h1>
+          <p></p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" id="theme-toggle">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="icon-btn" id="clear-chat">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Audio Controls -->
+    <div class="audio-controls">
+      <div class="control-group">
+        <label for="mute-toggle">Mute Speech</label>
+        <div class="toggle-switch">
+          <input type="checkbox" id="mute-toggle">
+          <span class="toggle-slider"></span>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label for="speech-speed">Speech Speed:</label>
+        <select id="speech-speed" class="speed-select">
+          <option value="0.8">Slow</option>
+          <option value="1" selected>Normal</option>
+          <option value="1.2">Fast</option>
+          <option value="1.5">Very Fast</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="chat-container" id="messages">
+      <!-- Messages will be added here dynamically -->
+    </div>
+    
+    <div class="typing-indicator" id="typing-indicator">
+      <div class="typing-dots">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+    </div>
+    
+    <div class="input-container">
+      <input type="text" class="input-box" id="input-message" placeholder="Ask a question..." autocomplete="off">
+      <button class="send-btn" id="send-button">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+    
+    <div class="app-footer">
+      <p>Subject-aware AI Tutor · Created by <strong>ADI</strong></p>
+    </div>
+  </div>
+</body>
+</html>

@@ -2,200 +2,139 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ABUQATAADA DIGITAL INC – AI Chat</title>
-  <script src="https://js.puter.com/v2/"></script>
-  <style>
-    :root {
-      --green: #10b981;
-      --blue: #3b82f6;
-      --light-bg: #ffffff;
-      --dark-bg: #111827;
-      --light-text: #1f2937;
-      --dark-text: #f9fafb;
-      --ai-light: #f1f5f9;
-      --ai-dark: #1f2937;
-      --user-light: #d1fae5;
-      --user-dark: #047857;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Segoe UI", sans-serif;
-      background-color: var(--light-bg);
-      color: var(--light-text);
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    body.dark {
-      background-color: var(--dark-bg);
-      color: var(--dark-text);
-    }
-
-    header {
-      background: var(--green);
-      color: white;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.2rem;
-      font-weight: bold;
-      position: relative;
-    }
-
-    #toggleTheme {
-      position: absolute;
-      right: 1rem;
-      top: 1rem;
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    #chat {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      max-width: 800px;
-      margin: 0 auto;
-      width: 100%;
-    }
-
-    #messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .message {
-      max-width: 80%;
-      padding: 12px;
-      border-radius: 12px;
-      font-size: 1em;
-      line-height: 1.5;
-      word-wrap: break-word;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    .user {
-      align-self: flex-end;
-      background: var(--user-light);
-    }
-
-    .ai {
-      align-self: flex-start;
-      background: var(--ai-light);
-      border-left: 4px solid var(--blue);
-    }
-
-    body.dark .user {
-      background: var(--user-dark);
-      color: white;
-    }
-
-    body.dark .ai {
-      background: var(--ai-dark);
-      color: white;
-    }
-
-    #inputContainer {
-      display: flex;
-      border-top: 1px solid #ccc;
-    }
-
-    #userInput {
-      flex: 1;
-      padding: 14px;
-      border: none;
-      font-size: 1em;
-      outline: none;
-    }
-
-    @media (max-width: 600px) {
-      #chat {
-        height: 100vh;
-      }
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Subject Based - AI Assistant</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    ABUQATAADA DIGITAL INC – AI Chat Assistant
-    <button id="toggleTheme">🌙</button>
-  </header>
+  <div class="app-container">
+    <div class="app-header">
+      <div class="logo">
+        <i class="fas fa-graduation-cap"></i>
+      </div>
+      <h1>Select Your Subject</h1>
+      <p class="subtitle">Choose a subject to start learning with your AI assistant</p>
+    </div>
 
-  <div id="chat">
-    <div id="messages"></div>
-    <div id="inputContainer">
-      <input id="userInput" type="text" placeholder="Ask me anything..." autocomplete="off" />
+    <div class="subject-select-container">
+      <select id="subject-select">
+        <option disabled selected>Select subject from dropdown...</option>
+        <option>Physics</option>
+        <option>Mathematics</option>
+        <option>Further Mathematics</option>
+        <option>Chemistry</option>
+        <option>Biology</option>
+        <option>English Language</option>
+        <option>Literature in English</option>
+        <option>Government</option>
+        <option>Commerce</option>
+        <option>Economics</option>
+        <option>Geography</option>
+        <option>CRS</option>
+        <option>IRS</option>
+        <option>Accounting</option>
+        <option>Computer Studies</option>
+        <option>Civic Education</option>
+        <option>Agricultural Science</option>
+        <option>Technical Drawing</option>
+        <option>Food and Nutrition</option>
+        <option>Physical Education</option>
+        <option>Music</option>
+        <option>Fine Arts</option>
+        <option>French</option>
+        <option>Arabic</option>
+        <option>History</option>
+        <option>Social Studies</option>
+        <option>Basic Science</option>
+        <option>Basic Technology</option>
+        <option>Home Economics</option>
+        <option>Business Studies</option>
+        <option>Marketing</option>
+        <option>Office Practice</option>
+      </select>
+    </div>
+
+    <button class="start-btn">
+      <i class="fas fa-robot"></i> Start Learning
+    </button>
+
+    <div class="subject-grid">
+      <div class="subject-card" data-subject="Physics">
+        <div class="subject-icon">
+          <i class="fas fa-atom"></i>
+        </div>
+        <div class="subject-name">Physics</div>
+      </div>
+      <div class="subject-card" data-subject="Mathematics">
+        <div class="subject-icon">
+          <i class="fas fa-square-root-alt"></i>
+        </div>
+        <div class="subject-name">Mathematics</div>
+      </div>
+      <div class="subject-card" data-subject="Chemistry">
+        <div class="subject-icon">
+          <i class="fas fa-flask"></i>
+        </div>
+        <div class="subject-name">Chemistry</div>
+      </div>
+      <div class="subject-card" data-subject="Biology">
+        <div class="subject-icon">
+          <i class="fas fa-dna"></i>
+        </div>
+        <div class="subject-name">Biology</div>
+      </div>
+      <div class="subject-card" data-subject="English Language">
+        <div class="subject-icon">
+          <i class="fas fa-language"></i>
+        </div>
+        <div class="subject-name">English</div>
+      </div>
+      <div class="subject-card" data-subject="Literature in English">
+        <div class="subject-icon">
+          <i class="fas fa-book-open"></i>
+        </div>
+        <div class="subject-name">Literature</div>
+      </div>
+      <div class="subject-card" data-subject="Computer Studies">
+        <div class="subject-icon">
+          <i class="fas fa-laptop-code"></i>
+        </div>
+        <div class="subject-name">Computer</div>
+      </div>
+      <div class="subject-card" data-subject="Economics">
+        <div class="subject-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="subject-name">Economics</div>
+      </div>
+      <div class="subject-card" data-subject="Government">
+        <div class="subject-icon">
+          <i class="fas fa-landmark"></i>
+        </div>
+        <div class="subject-name">Government</div>
+      </div>
+      <div class="subject-card" data-subject="Geography">
+        <div class="subject-icon">
+          <i class="fas fa-globe-africa"></i>
+        </div>
+        <div class="subject-name">Geography</div>
+      </div>
+      <div class="subject-card" data-subject="Accounting">
+        <div class="subject-icon">
+          <i class="fas fa-calculator"></i>
+        </div>
+        <div class="subject-name">Accounting</div>
+      </div>
+      <div class="subject-card" data-subject="Commerce">
+        <div class="subject-icon">
+          <i class="fas fa-business-time"></i>
+        </div>
+        <div class="subject-name">Commerce</div>
+      </div>
     </div>
   </div>
 
-  <script>
-    const input = document.getElementById('userInput');
-    const messagesDiv = document.getElementById('messages');
-    const themeBtn = document.getElementById('toggleTheme');
-    let history = JSON.parse(localStorage.getItem('chat_history')) || [];
-
-    function loadHistory() {
-      history.forEach(msg => {
-        appendMessage(msg.content, msg.role);
-      });
-    }
-
-    function appendMessage(text, role) {
-      const div = document.createElement('div');
-      div.className = `message ${role}`;
-      div.textContent = text;
-      messagesDiv.appendChild(div);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }
-
-    input.addEventListener('keydown', async (e) => {
-      if (e.key === 'Enter' && input.value.trim() !== "") {
-        const userText = input.value;
-        input.value = '';
-        appendMessage(userText, 'user');
-        history.push({ role: 'user', content: userText });
-
-        appendMessage("Thinking...", 'ai');
-        const response = await puter.ai.chat({ messages: history });
-
-        messagesDiv.lastChild.remove(); // remove "Thinking..."
-        const aiText = response.message || response;
-        appendMessage(aiText, 'ai');
-        history.push({ role: 'assistant', content: aiText });
-
-        localStorage.setItem('chat_history', JSON.stringify(history));
-      }
-    });
-
-    // Theme toggle
-    themeBtn.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-    });
-
-    // Load theme on start
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark');
-    }
-
-    // Load chat history
-    loadHistory();
-  </script>
+  <script src="index.js" defer></script>
 </body>
 </html>
