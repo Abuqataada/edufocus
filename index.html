@@ -4,131 +4,289 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Learning Assistant - Choose Your Level</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a0ca3;
+      --primary-light: #e0e8ff;
+      --secondary: #f72585;
+      --bg-light: #f8f9fa;
+      --bg-dark: #121212;
+      --text-light: #333;
+      --text-dark: #f8f9fa;
+      --card-light: #ffffff;
+      --card-dark: #1e1e1e;
+      --success: #4cc9f0;
+      --warning: #f8961e;
+      --error: #ef233c;
+      --radius: 16px;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-light);
       min-height: 100vh;
-      transition: background 0.3s, color 0.3s;
+      transition: var(--transition);
+      line-height: 1.6;
     }
+
     body.dark {
-      background: #121212;
-      color: #e0e0e0;
+      background: var(--bg-dark);
+      color: var(--text-dark);
     }
-    h1 {
-      margin-top: 40px;
-      color: #2c7aef;
-    }
+
     .container {
-      width: 90%;
-      max-width: 800px;
-      background: white;
-      padding: 30px;
-      margin: 20px auto;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
     }
-    body.dark .container {
-      background: #1e1e1e;
+
+    header {
+      text-align: center;
+      padding: 30px 0;
+      position: relative;
     }
-    .level-section {
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 10px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--text-light);
+      opacity: 0.8;
       margin-bottom: 30px;
     }
-    .level-title {
-      font-size: 1.3rem;
-      color: #2c7aef;
-      margin-bottom: 15px;
-      padding-bottom: 5px;
-      border-bottom: 2px solid #2c7aef;
+
+    body.dark h2 {
+      color: var(--text-dark);
     }
+
+    .level-section {
+      margin-bottom: 40px;
+      animation: slideUp 0.6s ease-out forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .level-section:nth-child(1) { animation-delay: 0.1s; }
+    .level-section:nth-child(2) { animation-delay: 0.2s; }
+    .level-section:nth-child(3) { animation-delay: 0.3s; }
+    .level-section:nth-child(4) { animation-delay: 0.4s; }
+
+    .level-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--primary);
+      display: inline-block;
+    }
+
     .subject-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 15px;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
     }
+
     .subject-card {
-      background: #f0f8ff;
-      padding: 20px;
-      border-radius: 8px;
-      text-align: center;
+      background: var(--card-light);
+      padding: 25px;
+      border-radius: var(--radius);
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      border: 1px solid #d0e3ff;
+      transition: var(--transition);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
     }
+
     body.dark .subject-card {
-      background: #2a2a2a;
-      border-color: #444;
+      background: var(--card-dark);
+      border-color: rgba(255, 255, 255, 0.05);
     }
+
     .subject-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transform: translateY(-5px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
     }
+
+    .subject-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: var(--transition);
+    }
+
+    .subject-card:hover::before {
+      height: 6px;
+    }
+
     .subject-icon {
-      font-size: 2rem;
-      margin-bottom: 10px;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: var(--primary);
+      transition: var(--transition);
     }
+
+    .subject-card:hover .subject-icon {
+      transform: scale(1.1);
+    }
+
     .subject-name {
-      font-weight: bold;
-      margin-bottom: 5px;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
     }
+
     .subject-desc {
-      font-size: 0.9rem;
-      color: #666;
+      font-size: 0.95rem;
+      color: var(--text-light);
+      opacity: 0.8;
+      line-height: 1.5;
     }
+
     body.dark .subject-desc {
-      color: #aaa;
+      color: var(--text-dark);
     }
+
     .mode-toggle {
       position: fixed;
       top: 20px;
       right: 20px;
-      background: #2c7aef;
+      background: var(--primary);
       color: white;
       border: none;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 1.2rem;
+      width: 50px;
+      height: 50px;
+      font-size: 1.3rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+      z-index: 100;
+    }
+
+    .mode-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { 
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+      
+      h2 {
+        font-size: 1rem;
+      }
+      
+      .container {
+        padding: 15px;
+      }
+      
+      .subject-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+      
+      .subject-card {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .subject-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .level-title {
+        font-size: 1.3rem;
+      }
     }
   </style>
 </head>
 <body>
-  <button class="mode-toggle" onclick="toggleDarkMode()">🌙</button>
-  <h1>📚 AI Learning Assistant</h1>
+  <button class="mode-toggle" onclick="toggleDarkMode()">
+    <i class="fas fa-moon"></i>
+  </button>
+  
   <div class="container">
-    <h2>Select Your Education Level and Subject</h2>
+    <header>
+      <h1><i class="fas fa-graduation-cap"></i> AI Learning Assistant</h1>
+      <h2>Select your education level and subject to begin</h2>
+    </header>
     
     <div class="level-section">
       <div class="level-title">Early Years (Ages 3-6)</div>
       <div class="subject-grid">
         <div class="subject-card" onclick="selectSubject('early', 'literacy')">
-          <div class="subject-icon">🔤</div>
+          <div class="subject-icon"><i class="fas fa-book-open"></i></div>
           <div class="subject-name">Early Literacy</div>
-          <div class="subject-desc">Reading, writing, phonics</div>
+          <div class="subject-desc">Reading, writing, phonics and storytelling fundamentals</div>
         </div>
         <div class="subject-card" onclick="selectSubject('early', 'numeracy')">
-          <div class="subject-icon">🔢</div>
+          <div class="subject-icon"><i class="fas fa-calculator"></i></div>
           <div class="subject-name">Numeracy</div>
-          <div class="subject-desc">Counting, shapes, patterns</div>
+          <div class="subject-desc">Counting, shapes, patterns and basic math concepts</div>
         </div>
         <div class="subject-card" onclick="selectSubject('early', 'science')">
-          <div class="subject-icon">🔍</div>
+          <div class="subject-icon"><i class="fas fa-microscope"></i></div>
           <div class="subject-name">Early Science</div>
-          <div class="subject-desc">Nature, animals, weather</div>
+          <div class="subject-desc">Nature, animals, weather and scientific curiosity</div>
         </div>
         <div class="subject-card" onclick="selectSubject('early', 'arts')">
-          <div class="subject-icon">🎨</div>
+          <div class="subject-icon"><i class="fas fa-paint-brush"></i></div>
           <div class="subject-name">Creative Arts</div>
-          <div class="subject-desc">Drawing, music, crafts</div>
+          <div class="subject-desc">Drawing, music, crafts and creative expression</div>
         </div>
       </div>
     </div>
@@ -137,24 +295,24 @@
       <div class="level-title">Primary School (Ages 6-12)</div>
       <div class="subject-grid">
         <div class="subject-card" onclick="selectSubject('primary', 'math')">
-          <div class="subject-icon">➕</div>
+          <div class="subject-icon"><i class="fas fa-square-root-alt"></i></div>
           <div class="subject-name">Mathematics</div>
-          <div class="subject-desc">Arithmetic, geometry</div>
+          <div class="subject-desc">Arithmetic, geometry and problem solving</div>
         </div>
         <div class="subject-card" onclick="selectSubject('primary', 'english')">
-          <div class="subject-icon">📖</div>
+          <div class="subject-icon"><i class="fas fa-language"></i></div>
           <div class="subject-name">English</div>
-          <div class="subject-desc">Reading, writing, grammar</div>
+          <div class="subject-desc">Reading, writing, grammar and literature</div>
         </div>
         <div class="subject-card" onclick="selectSubject('primary', 'science')">
-          <div class="subject-icon">🧪</div>
+          <div class="subject-icon"><i class="fas fa-atom"></i></div>
           <div class="subject-name">Science</div>
-          <div class="subject-desc">Biology, chemistry, physics</div>
+          <div class="subject-desc">Biology, chemistry, physics and earth science</div>
         </div>
         <div class="subject-card" onclick="selectSubject('primary', 'history')">
-          <div class="subject-icon">🏛️</div>
+          <div class="subject-icon"><i class="fas fa-landmark"></i></div>
           <div class="subject-name">History</div>
-          <div class="subject-desc">World events, cultures</div>
+          <div class="subject-desc">World events, cultures and historical figures</div>
         </div>
       </div>
     </div>
@@ -163,24 +321,24 @@
       <div class="level-title">Junior Secondary (Ages 12-15)</div>
       <div class="subject-grid">
         <div class="subject-card" onclick="selectSubject('junior', 'math')">
-          <div class="subject-icon">🧮</div>
+          <div class="subject-icon"><i class="fas fa-calculator"></i></div>
           <div class="subject-name">Mathematics</div>
-          <div class="subject-desc">Algebra, geometry, statistics</div>
+          <div class="subject-desc">Algebra, geometry, statistics and probability</div>
         </div>
         <div class="subject-card" onclick="selectSubject('junior', 'physics')">
-          <div class="subject-icon">⚛️</div>
+          <div class="subject-icon"><i class="fas fa-bolt"></i></div>
           <div class="subject-name">Physics</div>
-          <div class="subject-desc">Motion, energy, forces</div>
+          <div class="subject-desc">Motion, energy, forces and fundamental laws</div>
         </div>
         <div class="subject-card" onclick="selectSubject('junior', 'chemistry')">
-          <div class="subject-icon">🧪</div>
+          <div class="subject-icon"><i class="fas fa-flask"></i></div>
           <div class="subject-name">Chemistry</div>
-          <div class="subject-desc">Elements, reactions, atoms</div>
+          <div class="subject-desc">Elements, reactions, atoms and molecules</div>
         </div>
         <div class="subject-card" onclick="selectSubject('junior', 'biology')">
-          <div class="subject-icon">🧬</div>
+          <div class="subject-icon"><i class="fas fa-dna"></i></div>
           <div class="subject-name">Biology</div>
-          <div class="subject-desc">Cells, organisms, ecosystems</div>
+          <div class="subject-desc">Cells, organisms, ecosystems and genetics</div>
         </div>
       </div>
     </div>
@@ -189,24 +347,24 @@
       <div class="level-title">Senior Secondary (Ages 15-18)</div>
       <div class="subject-grid">
         <div class="subject-card" onclick="selectSubject('senior', 'math')">
-          <div class="subject-icon">∫</div>
+          <div class="subject-icon"><i class="fas fa-infinity"></i></div>
           <div class="subject-name">Mathematics</div>
-          <div class="subject-desc">Calculus, trigonometry</div>
+          <div class="subject-desc">Calculus, trigonometry and advanced algebra</div>
         </div>
         <div class="subject-card" onclick="selectSubject('senior', 'physics')">
-          <div class="subject-icon">🌌</div>
+          <div class="subject-icon"><i class="fas fa-rocket"></i></div>
           <div class="subject-name">Physics</div>
-          <div class="subject-desc">Mechanics, electricity</div>
+          <div class="subject-desc">Mechanics, electricity, magnetism and waves</div>
         </div>
         <div class="subject-card" onclick="selectSubject('senior', 'chemistry')">
-          <div class="subject-icon">⚗️</div>
+          <div class="subject-icon"><i class="fas fa-vial"></i></div>
           <div class="subject-name">Chemistry</div>
-          <div class="subject-desc">Organic, inorganic, physical</div>
+          <div class="subject-desc">Organic, inorganic, physical and analytical</div>
         </div>
         <div class="subject-card" onclick="selectSubject('senior', 'economics')">
-          <div class="subject-icon">💹</div>
+          <div class="subject-icon"><i class="fas fa-chart-line"></i></div>
           <div class="subject-name">Economics</div>
-          <div class="subject-desc">Micro, macro, finance</div>
+          <div class="subject-desc">Micro, macro, finance and economic theory</div>
         </div>
       </div>
     </div>
@@ -216,21 +374,45 @@
     function toggleDarkMode() {
       document.body.classList.toggle('dark');
       localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+      
+      const icon = document.querySelector('.mode-toggle i');
+      if (document.body.classList.contains('dark')) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      }
     }
     
     // Check for saved dark mode preference
     if (localStorage.getItem('darkMode') === 'true') {
       document.body.classList.add('dark');
+      const icon = document.querySelector('.mode-toggle i');
+      icon.classList.remove('fa-moon');
+      icon.classList.add('fa-sun');
     }
     
     function selectSubject(level, subject) {
+      // Add click animation
+      const card = event.currentTarget;
+      card.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        card.style.transform = '';
+      }, 200);
+      
       // Store selection in localStorage
       localStorage.setItem('learningLevel', level);
       localStorage.setItem('learningSubject', subject);
       
-      // Redirect to question page
-      window.location.href = 'question.html';
+      // Redirect with slight delay for animation
+      setTimeout(() => {
+        window.location.href = 'question.html';
+      }, 300);
     }
+    
+    // Add hover effects for touch devices
+    document.addEventListener('touchstart', function() {}, true);
   </script>
 </body>
 </html>

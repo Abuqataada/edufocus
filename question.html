@@ -9,229 +9,460 @@
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a0ca3;
+      --secondary: #f72585;
+      --bg-light: #f8f9fa;
+      --bg-dark: #121212;
+      --text-light: #333;
+      --text-dark: #f8f9fa;
+      --card-light: #ffffff;
+      --card-dark: #1e1e1e;
+      --success: #4cc9f0;
+      --warning: #f8961e;
+      --error: #ef233c;
+      --radius: 12px;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-light);
       min-height: 100vh;
-      transition: background 0.3s, color 0.3s;
+      transition: var(--transition);
+      line-height: 1.6;
     }
+
     body.dark {
-      background: #121212;
-      color: #e0e0e0;
+      background: var(--bg-dark);
+      color: var(--text-dark);
     }
-    h1 {
-      margin-top: 20px;
-      color: #2c7aef;
-    }
+
     .container {
-      width: 90%;
-      max-width: 700px;
-      background: white;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
       padding: 20px;
-      margin: 20px auto;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-direction: column;
-      height: 70vh;
+      height: 100vh;
+      position: relative;
     }
-    body.dark .container {
-      background: #1e1e1e;
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      position: relative;
+      z-index: 10;
     }
+
     .subject-header {
       display: flex;
       align-items: center;
-      margin-bottom: 15px;
+      gap: 15px;
+      animation: fadeIn 0.5s ease-out;
     }
+
     .subject-icon {
-      font-size: 2rem;
-      margin-right: 15px;
+      font-size: 2.2rem;
+      background: var(--primary);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
     }
+
     .subject-info h2 {
-      margin: 0;
-      color: #2c7aef;
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-bottom: 4px;
     }
+
     .subject-info p {
-      margin: 5px 0 0;
-      color: #666;
+      font-size: 0.9rem;
+      opacity: 0.8;
     }
-    body.dark .subject-info p {
-      color: #aaa;
-    }
+
     .chat-container {
       flex: 1;
       overflow-y: auto;
-      margin-bottom: 15px;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      background: #f9f9f9;
+      padding: 15px 5px;
+      margin: 15px 0;
+      scroll-behavior: smooth;
     }
-    body.dark .chat-container {
-      background: #2a2a2a;
-      border-color: #444;
+
+    .chat-container::-webkit-scrollbar {
+      width: 6px;
     }
+
+    .chat-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .chat-container::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 3px;
+    }
+
     .message {
       margin-bottom: 15px;
-      padding: 10px 15px;
-      border-radius: 18px;
-      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      max-width: 85%;
       word-wrap: break-word;
+      position: relative;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: messageIn 0.3s ease-out forwards;
+      box-shadow: var(--shadow);
     }
+
+    @keyframes messageIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .user-message {
-      background-color: #e3f2fd;
+      background: var(--primary);
+      color: white;
       margin-left: auto;
-      border-bottom-right-radius: 5px;
+      border-bottom-right-radius: 4px;
     }
-    body.dark .user-message {
-      background-color: #2c3e50;
-      color: #ecf0f1;
-    }
+
     .bot-message {
-      background-color: #f1f1f1;
+      background: var(--card-light);
       margin-right: auto;
-      border-bottom-left-radius: 5px;
+      border-bottom-left-radius: 4px;
     }
+
     body.dark .bot-message {
-      background-color: #34495e;
-      color: #ecf0f1;
+      background: var(--card-dark);
     }
+
     .input-area {
       display: flex;
       gap: 10px;
+      padding: 10px 0;
+      position: sticky;
+      bottom: 0;
+      background: var(--bg-light);
+      z-index: 5;
     }
+
+    body.dark .input-area {
+      background: var(--bg-dark);
+    }
+
     textarea {
       flex: 1;
-      padding: 12px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      border: none;
+      border-radius: var(--radius);
       resize: none;
+      background: var(--card-light);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      min-height: 50px;
+      max-height: 150px;
     }
+
     body.dark textarea {
-      background: #2a2a2a;
-      color: #e0e0e0;
-      border-color: #444;
+      background: var(--card-dark);
     }
+
+    textarea:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--primary);
+    }
+
     .button-group {
       display: flex;
-      gap: 5px;
+      gap: 8px;
     }
+
     button {
-      background-color: #007bff;
-      color: white;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    button:disabled {
-      background-color: #cccccc;
-      cursor: not-allowed;
-    }
-    #imageOutput {
-      margin-top: 15px;
-      max-width: 100%;
-    }
-    #imageOutput img {
-      max-width: 100%;
-      border-radius: 5px;
-    }
-    #footer {
-      margin: 20px;
-      font-size: 14px;
-      color: #777;
-    }
-    .toolbar {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-    .mode-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #2c7aef;
+      background: var(--primary);
       color: white;
       border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 1.2rem;
+      border-radius: var(--radius);
+      padding: 0 18px;
+      font-size: 1rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+      min-width: 60px;
     }
-    .back-btn {
-      background-color: #6c757d;
+
+    button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button.secondary {
+      background: var(--card-light);
+      color: var(--primary);
+      width: 50px;
+    }
+
+    body.dark button.secondary {
+      background: var(--card-dark);
+    }
+
+    .dropup {
+      position: relative;
+    }
+
+    .dropup-content {
+      position: absolute;
+      bottom: 100%;
+      right: 0;
+      background: var(--card-light);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      min-width: 180px;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(10px);
+      visibility: hidden;
+      transition: var(--transition);
+      z-index: 20;
+      margin-bottom: 10px;
+    }
+
+    body.dark .dropup-content {
+      background: var(--card-dark);
+    }
+
+    .dropup.active .dropup-content {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+
+    .dropup-content a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      text-decoration: none;
+      color: var(--text-light);
+      transition: var(--transition);
+    }
+
+    body.dark .dropup-content a {
+      color: var(--text-dark);
+    }
+
+    .dropup-content a:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    body.dark .dropup-content a:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .dropup-content a i {
+      width: 20px;
+      text-align: center;
+    }
+
+    #imageOutput {
+      margin-top: 15px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    #imageOutput img {
+      width: 100%;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    .mode-toggle, .back-btn {
       position: fixed;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+      z-index: 100;
+      border: none;
+    }
+
+    .mode-toggle {
+      background: var(--primary);
+      color: white;
+      top: 20px;
+      right: 20px;
+    }
+
+    .back-btn {
+      background: var(--card-light);
+      color: var(--primary);
       top: 20px;
       left: 20px;
     }
-    .clear-btn {
-      background-color: #dc3545;
+
+    body.dark .back-btn {
+      background: var(--card-dark);
     }
+
     .typing-indicator {
-      display: inline-block;
-      padding: 10px 15px;
-      background-color: #f1f1f1;
-      border-radius: 18px;
-      border-bottom-left-radius: 5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      background: var(--card-light);
+      border-radius: var(--radius);
       margin-bottom: 15px;
+      box-shadow: var(--shadow);
     }
+
     body.dark .typing-indicator {
-      background-color: #34495e;
+      background: var(--card-dark);
     }
+
     .typing-dot {
-      display: inline-block;
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background-color: #666;
-      margin: 0 2px;
+      background: var(--primary);
       animation: typingAnimation 1.4s infinite ease-in-out;
     }
-    body.dark .typing-dot {
-      background-color: #aaa;
-    }
+
     .typing-dot:nth-child(1) {
       animation-delay: 0s;
     }
+
     .typing-dot:nth-child(2) {
       animation-delay: 0.2s;
     }
+
     .typing-dot:nth-child(3) {
       animation-delay: 0.4s;
     }
+
     @keyframes typingAnimation {
       0%, 60%, 100% { transform: translateY(0); }
-      30% { transform: translateY(-5px); }
+      30% { transform: translateY(-4px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+        height: 100dvh;
+      }
+      
+      .subject-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 1.8rem;
+      }
+      
+      .subject-info h2 {
+        font-size: 1.3rem;
+      }
+      
+      .input-area {
+        gap: 8px;
+      }
+      
+      textarea {
+        padding: 12px 14px;
+      }
+      
+      button {
+        padding: 0 14px;
+      }
+      
+      .dropup-content {
+        min-width: 160px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .subject-header {
+        gap: 10px;
+      }
+      
+      .subject-info h2 {
+        font-size: 1.2rem;
+      }
+      
+      .message {
+        max-width: 90%;
+        padding: 10px 14px;
+      }
+      
+      .button-group {
+        gap: 6px;
+      }
+      
+      button {
+        min-width: 50px;
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
-
 <body>
   <button class="mode-toggle" onclick="toggleDarkMode()">🌙</button>
-  <button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
+  <button class="back-btn" onclick="window.location.href='index.html'">←</button>
   
   <div class="container">
-    <div class="subject-header">
-      <div class="subject-icon" id="subjectIcon">📚</div>
-      <div class="subject-info">
-        <h2 id="subjectTitle">Subject</h2>
-        <p id="levelInfo">Level</p>
+    <div class="header">
+      <div class="subject-header">
+        <div class="subject-icon" id="subjectIcon">📚</div>
+        <div class="subject-info">
+          <h2 id="subjectTitle">Subject</h2>
+          <p id="levelInfo">Level</p>
+        </div>
       </div>
     </div>
     
@@ -240,417 +471,451 @@
     </div>
     
     <div class="input-area">
-      <textarea id="learningInput" placeholder="Enter your question here..." rows="1"></textarea>
+      <textarea id="learningInput" placeholder="Ask me anything..." rows="1"></textarea>
       <div class="button-group">
-        <button onclick="sendMessage()">Send</button>
-        <button onclick="generateImage()" id="imageBtn">Image</button>
-      </div>
-    </div>
-    
-    <div class="toolbar">
-      <div>
-        <button onclick="exportPDF()">Export as PDF</button>
-        <button class="clear-btn" onclick="clearChat()">Clear Chat</button>
+        <button onclick="sendMessage()">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+        <div class="dropup" id="actionsDropup">
+          <button class="secondary" onclick="toggleDropup()">
+            <i class="fas fa-ellipsis-v"></i>
+          </button>
+          <div class="dropup-content">
+            <a href="#" onclick="exportPDF()">
+              <i class="fas fa-file-pdf"></i> Export PDF
+            </a>
+            <a href="#" onclick="clearChat()">
+              <i class="fas fa-trash-alt"></i> Clear Chat
+            </a>
+            <a href="#" onclick="generateImage()">
+              <i class="fas fa-image"></i> Create Image
+            </a>
+          </div>
+        </div>
       </div>
     </div>
     
     <div id="imageOutput"></div>
+    
+    <div class="footer">Created with 💡 by ADI</div>
   </div>
   
-  <div id="footer">Built with 💡 using Puter.js</div>
-  
   <script>
-    const messages = [];
-    let currentLevel = '';
-    let currentSubject = '';
-    let chatHistory = [];
-    
-    // Subject icons mapping
-    const subjectIcons = {
-      'literacy': '🔤',
-      'numeracy': '🔢',
-      'science': '🔍',
-      'arts': '🎨',
-      'math': '➕',
-      'english': '📖',
-      'history': '🏛️',
-      'geography': '🌍',
-      'physics': '⚛️',
-      'chemistry': '🧪',
-      'biology': '🧬',
-      'economics': '💹',
-      'literature': '📚'
-    };
-    
-    // Subject descriptions for relevance checking
-    const subjectDescriptions = {
-      'literacy': 'reading, writing, phonics, letters, words, sentences, storytelling',
-      'numeracy': 'counting, numbers, addition, subtraction, shapes, patterns, measurements',
-      'science': 'animals, plants, weather, nature, basic scientific concepts',
-      'arts': 'drawing, painting, music, crafts, creative expression',
-      'math': 'mathematics, arithmetic, algebra, geometry, calculus, trigonometry, statistics',
-      'english': 'grammar, composition, reading comprehension, vocabulary, writing skills',
-      'history': 'historical events, civilizations, timelines, important figures, world history',
-      'geography': 'maps, countries, capitals, landforms, climates, cultures',
-      'physics': 'motion, forces, energy, electricity, magnetism, thermodynamics, waves',
-      'chemistry': 'elements, compounds, reactions, atoms, molecules, periodic table',
-      'biology': 'cells, organisms, ecosystems, genetics, human body, plants, animals',
-      'economics': 'supply and demand, markets, finance, microeconomics, macroeconomics',
-      'literature': 'books, novels, poems, literary analysis, authors, themes, characters'
-    };
-    
-    // Level names for display
-    const levelNames = {
-      'early': 'Early Years',
-      'primary': 'Primary School',
-      'junior': 'Junior Secondary',
-      'senior': 'Senior Secondary'
-    };
-    
-    // Subject names for display
-    const subjectNames = {
-      'literacy': 'Early Literacy',
-      'numeracy': 'Numeracy',
-      'science': 'Science',
-      'arts': 'Creative Arts',
-      'math': 'Mathematics',
-      'english': 'English',
-      'history': 'History',
-      'geography': 'Geography',
-      'physics': 'Physics',
-      'chemistry': 'Chemistry',
-      'biology': 'Biology',
-      'economics': 'Economics',
-      'literature': 'Literature'
-    };
+   // Subject icons mapping
+const subjectIcons = {
+  'literacy': '🔤',
+  'numeracy': '🔢',
+  'science': '🔍',
+  'arts': '🎨',
+  'math': '➕',
+  'english': '📖',
+  'history': '🏛️',
+  'geography': '🌍',
+  'physics': '⚛️',
+  'chemistry': '🧪',
+  'biology': '🧬',
+  'economics': '💹',
+  'literature': '📚'
+};
 
-    function toggleDarkMode() {
-      document.body.classList.toggle('dark');
-      localStorage.setItem('darkMode', document.body.classList.contains('dark'));
-    }
-    
-    // Initialize page
-    function initPage() {
-      // Check for dark mode preference
-      if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark');
-      }
-      
-      // Get level and subject from localStorage
-      currentLevel = localStorage.getItem('learningLevel') || 'early';
-      currentSubject = localStorage.getItem('learningSubject') || 'literacy';
-      
-      // Update page title and header
-      document.getElementById('subjectTitle').textContent = subjectNames[currentSubject] || 'Subject';
-      document.getElementById('levelInfo').textContent = levelNames[currentLevel] || 'Level';
-      document.getElementById('subjectIcon').textContent = subjectIcons[currentSubject] || '📚';
-      document.title = `${subjectNames[currentSubject]} - AI Learning Assistant`;
-      
-      // Load chat history from localStorage
-      loadChatHistory();
-      
-      // Set up textarea auto-resize
-      const textarea = document.getElementById('learningInput');
-      textarea.addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = (this.scrollHeight) + 'px';
-      });
-      
-      // Set up Enter key to send message
-      textarea.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          sendMessage();
-        }
-      });
-      
-      // Add welcome message if chat is empty
-      if (chatHistory.length === 0) {
-        addBotMessage(`Hello! I'm your ${subjectNames[currentSubject]} tutor for ${levelNames[currentLevel]}. How can I help you today?`);
-      }
-    }
-    
-    function loadChatHistory() {
-      const savedChat = localStorage.getItem(`chatHistory_${currentSubject}_${currentLevel}`);
-      if (savedChat) {
-        chatHistory = JSON.parse(savedChat);
-        renderChatHistory();
-      }
-    }
-    
-    function saveChatHistory() {
-      localStorage.setItem(`chatHistory_${currentSubject}_${currentLevel}`, JSON.stringify(chatHistory));
-    }
-    
-    function renderChatHistory() {
-      const chatContainer = document.getElementById('chatContainer');
-      chatContainer.innerHTML = '';
-      
-      chatHistory.forEach(item => {
-        if (item.type === 'user') {
-          addUserMessage(item.content, false);
-        } else if (item.type === 'bot') {
-          addBotMessage(item.content, false);
-        } else if (item.type === 'image') {
-          addImageMessage(item.content, false);
-        }
-      });
-    }
-    
-    function addUserMessage(message, saveToHistory = true) {
-      const chatContainer = document.getElementById('chatContainer');
-      const messageDiv = document.createElement('div');
-      messageDiv.className = 'message user-message';
-      messageDiv.textContent = message;
-      chatContainer.appendChild(messageDiv);
-      
-      if (saveToHistory) {
-        chatHistory.push({
-          type: 'user',
-          content: message,
-          timestamp: new Date().toISOString()
-        });
-        saveChatHistory();
-      }
-      
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-    
-    function addBotMessage(message, saveToHistory = true) {
-      const chatContainer = document.getElementById('chatContainer');
-      
-      // Remove any typing indicator
-      const typingIndicator = document.querySelector('.typing-indicator');
-      if (typingIndicator) {
-        typingIndicator.remove();
-      }
-      
-      const messageDiv = document.createElement('div');
-      messageDiv.className = 'message bot-message';
-      
-      // Process message for LaTeX and other formatting
-      messageDiv.innerHTML = message.replace(/\n/g, '<br>');
-      
-      chatContainer.appendChild(messageDiv);
-      
-      if (saveToHistory) {
-        chatHistory.push({
-          type: 'bot',
-          content: message,
-          timestamp: new Date().toISOString()
-        });
-        saveChatHistory();
-      }
-      
-      // Render MathJax if present
-      if (message.includes('\\(') || message.includes('\\[')) {
-        MathJax.typesetPromise([messageDiv]).catch(err => console.log('MathJax error:', err));
-      }
-      
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-    
-    function addImageMessage(imageUrl, saveToHistory = true) {
-      const chatContainer = document.getElementById('chatContainer');
-      
-      const containerDiv = document.createElement('div');
-      containerDiv.className = 'message bot-message';
-      
-      const img = document.createElement('img');
-      img.src = imageUrl;
-      img.alt = "Generated Diagram";
-      img.style.maxWidth = "100%";
-      
-      containerDiv.appendChild(img);
-      chatContainer.appendChild(containerDiv);
-      
-      if (saveToHistory) {
-        chatHistory.push({
-          type: 'image',
-          content: imageUrl,
-          timestamp: new Date().toISOString()
-        });
-        saveChatHistory();
-      }
-      
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-    
-    function showTypingIndicator() {
-      const chatContainer = document.getElementById('chatContainer');
-      
-      const typingDiv = document.createElement('div');
-      typingDiv.className = 'typing-indicator';
-      typingDiv.innerHTML = `
-        <span class="typing-dot"></span>
-        <span class="typing-dot"></span>
-        <span class="typing-dot"></span>
-      `;
-      
-      chatContainer.appendChild(typingDiv);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-    
-    async function sendMessage() {
-      const inputElement = document.getElementById('learningInput');
-      const question = inputElement.value.trim();
-      
-      if (!question) {
-        alert("Please enter a question.");
-        return;
-      }
-      
-      // Add user message to chat
-      addUserMessage(question);
-      inputElement.value = '';
-      inputElement.style.height = 'auto';
-      
-      // Show typing indicator
-      showTypingIndicator();
-      
-      try {
-        let systemPrompt = `
-        You are a ${levelNames[currentLevel]} ${subjectNames[currentSubject]} tutor. 
-        Before answering any question, you MUST follow these rules:
-        
-        1. FIRST analyze if the question is relevant to ${subjectNames[currentSubject]} (${subjectDescriptions[currentSubject]}).
-        2. IF the question is relevant:
-           - For STEM subjects, use the I.S.E.E method (Identify, Setup, Execute, Evaluate)
-           - For humanities, provide structured analysis
-           - For early years, use simple language with emojis
-           - Always provide age-appropriate explanations
-        3. IF the question is NOT relevant:
-           - Politely explain why it's not relevant to ${subjectNames[currentSubject]}
-           - Suggest the most appropriate subject(s) for this question
-           - Do NOT answer the question itself
-        
-        Current subject: ${subjectNames[currentSubject]} (${subjectDescriptions[currentSubject]})
-        Current level: ${levelNames[currentLevel]}
-        `;
-        
-        // Add subject-specific guidance
-        if (currentSubject === 'math' || currentSubject === 'numeracy') {
-          systemPrompt += `\nMath-specific: Show step-by-step working. Use LaTeX for math: \\(x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}\\)`;
-        } else if (['physics','chemistry','biology','science'].includes(currentSubject)) {
-          systemPrompt += `\nScience-specific: Explain concepts with real-world examples. Use proper terminology.`;
-        } else if (['english','literature','literacy'].includes(currentSubject)) {
-          systemPrompt += `\nLanguage-specific: Provide clear explanations of grammar and literary elements.`;
-        }
+// Subject descriptions for relevance checking
+const subjectDescriptions = {
+  'literacy': 'reading, writing, phonics, letters, words, sentences, storytelling',
+  'numeracy': 'counting, numbers, addition, subtraction, shapes, patterns, measurements',
+  'science': 'animals, plants, weather, nature, basic scientific concepts',
+  'arts': 'drawing, painting, music, crafts, creative expression',
+  'math': 'mathematics, arithmetic, algebra, geometry, calculus, trigonometry, statistics',
+  'english': 'grammar, composition, reading comprehension, vocabulary, writing skills',
+  'history': 'historical events, civilizations, timelines, important figures, world history',
+  'geography': 'maps, countries, capitals, landforms, climates, cultures',
+  'physics': 'motion, forces, energy, electricity, magnetism, thermodynamics, waves',
+  'chemistry': 'elements, compounds, reactions, atoms, molecules, periodic table',
+  'biology': 'cells, organisms, ecosystems, genetics, human body, plants, animals',
+  'economics': 'supply and demand, markets, finance, microeconomics, macroeconomics',
+  'literature': 'books, novels, poems, literary analysis, authors, themes, characters'
+};
 
-        const response = await puter.ai.chat([
-          {
-            role: "system",
-            content: systemPrompt
-          },
-          {
-            role: "user",
-            content: question
-          }
-        ]);
+// Level names for display
+const levelNames = {
+  'early': 'Early Years',
+  'primary': 'Primary School',
+  'junior': 'Junior Secondary',
+  'senior': 'Senior Secondary'
+};
 
-        addBotMessage(response.message.content);
-      } catch (error) {
-        addBotMessage("❌ Error: " + error.message);
-      }
+// Subject names for display
+const subjectNames = {
+  'literacy': 'Early Literacy',
+  'numeracy': 'Numeracy',
+  'science': 'Science',
+  'arts': 'Creative Arts',
+  'math': 'Mathematics',
+  'english': 'English',
+  'history': 'History',
+  'geography': 'Geography',
+  'physics': 'Physics',
+  'chemistry': 'Chemistry',
+  'biology': 'Biology',
+  'economics': 'Economics',
+  'literature': 'Literature'
+};
+
+// DOM Elements
+const chatContainer = document.getElementById('chatContainer');
+const learningInput = document.getElementById('learningInput');
+const subjectIcon = document.getElementById('subjectIcon');
+const subjectTitle = document.getElementById('subjectTitle');
+const levelInfo = document.getElementById('levelInfo');
+const imageOutput = document.getElementById('imageOutput');
+const actionsDropup = document.getElementById('actionsDropup');
+
+// State variables
+let currentLevel = '';
+let currentSubject = '';
+let chatHistory = [];
+
+// Initialize the page
+function initPage() {
+  // Check for dark mode preference
+  if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark');
+  }
+  
+  // Get level and subject from localStorage
+  currentLevel = localStorage.getItem('learningLevel') || 'early';
+  currentSubject = localStorage.getItem('learningSubject') || 'literacy';
+  
+  // Update UI
+  subjectTitle.textContent = subjectNames[currentSubject] || 'Subject';
+  levelInfo.textContent = levelNames[currentLevel] || 'Level';
+  subjectIcon.textContent = subjectIcons[currentSubject] || '📚';
+  
+  // Load chat history
+  loadChatHistory();
+  
+  // Add welcome message if chat is empty
+  if (chatHistory.length === 0) {
+    addBotMessage(`Hello! I'm your ${subjectNames[currentSubject]} tutor for ${levelNames[currentLevel]}. How can I help you today?`);
+  }
+}
+
+// Toggle dark mode
+function toggleDarkMode() {
+  document.body.classList.toggle('dark');
+  localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+}
+
+// Toggle dropup menu
+function toggleDropup() {
+  actionsDropup.classList.toggle('active');
+}
+
+// Close dropup when clicking outside
+document.addEventListener('click', (e) => {
+  if (!actionsDropup.contains(e.target)) {
+    actionsDropup.classList.remove('active');
+  }
+});
+
+// Load chat history from localStorage
+function loadChatHistory() {
+  const savedChat = localStorage.getItem(`chatHistory_${currentSubject}_${currentLevel}`);
+  if (savedChat) {
+    chatHistory = JSON.parse(savedChat);
+    renderChatHistory();
+  }
+}
+
+// Save chat history to localStorage
+function saveChatHistory() {
+  localStorage.setItem(`chatHistory_${currentSubject}_${currentLevel}`, JSON.stringify(chatHistory));
+}
+
+// Render chat history to the UI
+function renderChatHistory() {
+  chatContainer.innerHTML = '';
+  
+  chatHistory.forEach(item => {
+    if (item.type === 'user') {
+      addUserMessage(item.content, false);
+    } else if (item.type === 'bot') {
+      addBotMessage(item.content, false);
+    } else if (item.type === 'image') {
+      addImageMessage(item.content, false);
+    }
+  });
+}
+
+// Add user message to chat
+function addUserMessage(message, saveToHistory = true) {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = 'message user-message';
+  messageDiv.textContent = message;
+  chatContainer.appendChild(messageDiv);
+  
+  if (saveToHistory) {
+    chatHistory.push({
+      type: 'user',
+      content: message,
+      timestamp: new Date().toISOString()
+    });
+    saveChatHistory();
+  }
+  
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+// Add bot message to chat
+function addBotMessage(message, saveToHistory = true) {
+  // Remove any typing indicator
+  const typingIndicator = document.querySelector('.typing-indicator');
+  if (typingIndicator) {
+    typingIndicator.remove();
+  }
+  
+  const messageDiv = document.createElement('div');
+  messageDiv.className = 'message bot-message';
+  messageDiv.innerHTML = message.replace(/\n/g, '<br>');
+  chatContainer.appendChild(messageDiv);
+  
+  if (saveToHistory) {
+    chatHistory.push({
+      type: 'bot',
+      content: message,
+      timestamp: new Date().toISOString()
+    });
+    saveChatHistory();
+  }
+  
+  // Render MathJax if present
+  if (message.includes('\\(') || message.includes('\\[')) {
+    MathJax.typesetPromise([messageDiv]).catch(err => console.log('MathJax error:', err));
+  }
+  
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+// Add image message to chat
+function addImageMessage(imageUrl, saveToHistory = true) {
+  const containerDiv = document.createElement('div');
+  containerDiv.className = 'message bot-message';
+  
+  const img = document.createElement('img');
+  img.src = imageUrl;
+  img.alt = "Generated Diagram";
+  
+  containerDiv.appendChild(img);
+  chatContainer.appendChild(containerDiv);
+  
+  if (saveToHistory) {
+    chatHistory.push({
+      type: 'image',
+      content: imageUrl,
+      timestamp: new Date().toISOString()
+    });
+    saveChatHistory();
+  }
+  
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+// Show typing indicator
+function showTypingIndicator() {
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'typing-indicator';
+  typingDiv.innerHTML = `
+    <span class="typing-dot"></span>
+    <span class="typing-dot"></span>
+    <span class="typing-dot"></span>
+  `;
+  
+  chatContainer.appendChild(typingDiv);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+// Send message to AI
+async function sendMessage() {
+  const question = learningInput.value.trim();
+  
+  if (!question) {
+    return;
+  }
+  
+  // Add user message to chat
+  addUserMessage(question);
+  learningInput.value = '';
+  learningInput.style.height = 'auto';
+  
+  // Show typing indicator
+  showTypingIndicator();
+  
+  try {
+    let systemPrompt = `
+    You are a ${levelNames[currentLevel]} ${subjectNames[currentSubject]} tutor. 
+    Before answering any question, you MUST follow these rules:
+    
+    1. FIRST analyze if the question is relevant to ${subjectNames[currentSubject]} (${subjectDescriptions[currentSubject]}).
+    2. IF the question is relevant:
+       - For STEM subjects, use the I.S.E.E method (Identify, Setup, Execute, Evaluate)
+       - For humanities, provide structured analysis
+       - For early years, use simple language with emojis
+       - Always provide age-appropriate explanations
+    3. IF the question is NOT relevant:
+       - Politely explain why it's not relevant to ${subjectNames[currentSubject]}
+       - Suggest the most appropriate subject(s) for this question
+       - Do NOT answer the question itself
+    
+    Current subject: ${subjectNames[currentSubject]} (${subjectDescriptions[currentSubject]})
+    Current level: ${levelNames[currentLevel]}
+    `;
+    
+    // Add subject-specific guidance
+    if (currentSubject === 'math' || currentSubject === 'numeracy') {
+      systemPrompt += `\nMath-specific: Show step-by-step working. Use LaTeX for math: \\(x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}\\)`;
+    } else if (['physics','chemistry','biology','science'].includes(currentSubject)) {
+      systemPrompt += `\nScience-specific: Explain concepts with real-world examples. Use proper terminology.`;
+    } else if (['english','literature','literacy'].includes(currentSubject)) {
+      systemPrompt += `\nLanguage-specific: Provide clear explanations of grammar and literary elements.`;
     }
 
-    async function generateImage() {
-      const inputElement = document.getElementById('learningInput');
-      const prompt = inputElement.value.trim();
-      
-      if (!prompt) {
-        alert("Please enter a description for the image.");
-        return;
+    const response = await puter.ai.chat([
+      {
+        role: "system",
+        content: systemPrompt
+      },
+      {
+        role: "user",
+        content: question
       }
+    ]);
 
-      // Disable button during generation
-      const imageBtn = document.getElementById('imageBtn');
-      imageBtn.disabled = true;
-      imageBtn.textContent = "Generating...";
-      
-      // Add user message to chat
-      addUserMessage(`[Requested image]: ${prompt}`);
-      inputElement.value = '';
-      inputElement.style.height = 'auto';
-      
-      // Show typing indicator
-      showTypingIndicator();
-      
-      try {
-        // First check if the prompt is relevant to the subject
-        const relevanceCheck = await puter.ai.chat([
-          {
-            role: "system",
-            content: `Determine if this prompt is relevant to ${subjectNames[currentSubject]} (${subjectDescriptions[currentSubject]}). 
-                     Respond ONLY with "relevant" or "not relevant". Prompt: ${prompt}`
-          }
-        ]);
-        
-        if (relevanceCheck.message.content.toLowerCase().includes("not relevant")) {
-          addBotMessage(`This doesn't seem related to ${subjectNames[currentSubject]}. 
-                       Please ask about ${subjectDescriptions[currentSubject]}.`);
-          return;
-        }
-        
-        let enhancedPrompt = `Educational ${currentSubject} diagram for ${levelNames[currentLevel]}: ${prompt}`;
-        const image = await puter.ai.images.generate(enhancedPrompt);
-        addImageMessage(image.url);
-      } catch (err) {
-        addBotMessage("❌ Error generating image: " + err.message);
-      } finally {
-        imageBtn.disabled = false;
-        imageBtn.textContent = "Image";
+    addBotMessage(response.message.content);
+  } catch (error) {
+    addBotMessage("❌ Error: " + error.message);
+  }
+}
+
+// Generate image from prompt
+async function generateImage() {
+  const prompt = learningInput.value.trim();
+  
+  if (!prompt) {
+    alert("Please enter a description for the image.");
+    return;
+  }
+
+  // Disable button during generation
+  const imageBtn = document.getElementById('imageBtn');
+  if (imageBtn) {
+    imageBtn.disabled = true;
+    imageBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  }
+  
+  // Add user message to chat
+  addUserMessage(`[Image Request]: ${prompt}`);
+  learningInput.value = '';
+  learningInput.style.height = 'auto';
+  
+  // Show typing indicator
+  showTypingIndicator();
+  
+  try {
+    // First check if the prompt is relevant to the subject
+    const relevanceCheck = await puter.ai.chat([
+      {
+        role: "system",
+        content: `Determine if this prompt is relevant to ${subjectNames[currentSubject]} (${subjectDescriptions[currentSubject]}). 
+                 Respond ONLY with "relevant" or "not relevant". Prompt: ${prompt}`
       }
-    }
-
-    function exportPDF() {
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF();
-      
-      // Add header with subject and level
-      pdf.setFontSize(16);
-      pdf.text(`${subjectNames[currentSubject]} (${levelNames[currentLevel]})`, 10, 10);
-      pdf.setFontSize(12);
-      
-      let yPosition = 20;
-      
-      // Add all chat messages to PDF
-      chatHistory.forEach(item => {
-        if (item.type === 'user') {
-          pdf.setFont(undefined, 'bold');
-          pdf.text(`You: ${item.content}`, 10, yPosition);
-          yPosition += 10;
-        } else if (item.type === 'bot') {
-          pdf.setFont(undefined, 'normal');
-          const splitText = pdf.splitTextToSize(`Tutor: ${item.content}`, 180);
-          pdf.text(splitText, 10, yPosition);
-          yPosition += splitText.length * 7;
-        }
-        
-        // Add space between messages
-        yPosition += 5;
-        
-        // Add new page if needed
-        if (yPosition > 280) {
-          pdf.addPage();
-          yPosition = 20;
-        }
-      });
-      
-      pdf.save(`${subjectNames[currentSubject]}_chat_history.pdf`);
+    ]);
+    
+    if (relevanceCheck.message.content.toLowerCase().includes("not relevant")) {
+      addBotMessage(`This doesn't seem related to ${subjectNames[currentSubject]}. 
+                   Please ask about ${subjectDescriptions[currentSubject]}.`);
+      return;
     }
     
-    function clearChat() {
-      if (confirm("Are you sure you want to clear the chat history?")) {
-        chatHistory = [];
-        saveChatHistory();
-        document.getElementById('chatContainer').innerHTML = '';
-        addBotMessage(`Hello! I'm your ${subjectNames[currentSubject]} tutor for ${levelNames[currentLevel]}. How can I help you today?`);
-      }
+    let enhancedPrompt = `Educational ${currentSubject} diagram for ${levelNames[currentLevel]}: ${prompt}`;
+    const image = await puter.ai.images.generate(enhancedPrompt);
+    addImageMessage(image.url);
+  } catch (err) {
+    addBotMessage("❌ Error generating image: " + err.message);
+  } finally {
+    const imageBtn = document.getElementById('imageBtn');
+    if (imageBtn) {
+      imageBtn.disabled = false;
+      imageBtn.innerHTML = '<i class="fas fa-image"></i>';
+    }
+  }
+}
+
+// Export chat as PDF
+function exportPDF() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF();
+  
+  // Add header with subject and level
+  pdf.setFontSize(16);
+  pdf.text(`${subjectNames[currentSubject]} (${levelNames[currentLevel]})`, 10, 10);
+  pdf.setFontSize(12);
+  
+  let yPosition = 20;
+  
+  // Add all chat messages to PDF
+  chatHistory.forEach(item => {
+    if (item.type === 'user') {
+      pdf.setFont(undefined, 'bold');
+      pdf.text(`You: ${item.content}`, 10, yPosition);
+      yPosition += 10;
+    } else if (item.type === 'bot') {
+      pdf.setFont(undefined, 'normal');
+      const splitText = pdf.splitTextToSize(`Tutor: ${item.content}`, 180);
+      pdf.text(splitText, 10, yPosition);
+      yPosition += splitText.length * 7;
+    } else if (item.type === 'image') {
+      pdf.text('Tutor: [Image]', 10, yPosition);
+      yPosition += 10;
     }
     
-    // Initialize the page when loaded
-    window.onload = initPage;
+    // Add space between messages
+    yPosition += 5;
+    
+    // Add new page if needed
+    if (yPosition > 280) {
+      pdf.addPage();
+      yPosition = 20;
+    }
+  });
+  
+  pdf.save(`${subjectNames[currentSubject]}_chat_history.pdf`);
+}
+
+// Clear chat history
+function clearChat() {
+  if (confirm("Are you sure you want to clear the chat history?")) {
+    chatHistory = [];
+    saveChatHistory();
+    chatContainer.innerHTML = '';
+    addBotMessage(`Hello! I'm your ${subjectNames[currentSubject]} tutor for ${levelNames[currentLevel]}. How can I help you today?`);
+  }
+}
+
+// Auto-resize textarea
+learningInput.addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = (this.scrollHeight) + 'px';
+});
+
+// Send message on Enter (but allow Shift+Enter for new lines)
+learningInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+// Initialize the page when loaded
+window.onload = initPage;
   </script>
 </body>
 </html>
