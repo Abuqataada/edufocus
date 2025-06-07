@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Learning Assistant</title>
+  <script src="https://js.puter.com/v2/"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark {
+      background: #121212;
+      color: #e0e0e0;
+    }
+    h1 {
+      margin-top: 20px;
+      color: #2c7aef;
+    }
+    .container {
+      width: 90%;
+      max-width: 700px;
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      height: 70vh;
+    }
+    body.dark .container {
+      background: #1e1e1e;
+    }
+    .subject-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .subject-icon {
+      font-size: 2rem;
+      margin-right: 15px;
+    }
+    .subject-info h2 {
+      margin: 0;
+      color: #2c7aef;
+    }
+    .subject-info p {
+      margin: 5px 0 0;
+      color: #666;
+    }
+    body.dark .subject-info p {
+      color: #aaa;
+    }
+    .chat-container {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background: #f9f9f9;
+    }
+    body.dark .chat-container {
+      background: #2a2a2a;
+      border-color: #444;
+    }
+    .message {
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      border-radius: 18px;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+    .user-message {
+      background-color: #e3f2fd;
+      margin-left: auto;
+      border-bottom-right-radius: 5px;
+    }
+    body.dark .user-message {
+      background-color: #2c3e50;
+      color: #ecf0f1;
+    }
+    .bot-message {
+      background-color: #f1f1f1;
+      margin-right: auto;
+      border-bottom-left-radius: 5px;
+    }
+    body.dark .bot-message {
+      background-color: #34495e;
+      color: #ecf0f1;
+    }
+    .input-area {
+      display: flex;
+      gap: 10px;
+    }
+    textarea {
+      flex: 1;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      resize: none;
+    }
+    body.dark textarea {
+      background: #2a2a2a;
+      color: #e0e0e0;
+      border-color: #444;
+    }
+    .button-group {
+      display: flex;
+      gap: 5px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    #imageOutput {
+      margin-top: 15px;
+      max-width: 100%;
+    }
+    #imageOutput img {
+      max-width: 100%;
+      border-radius: 5px;
+    }
+    #footer {
+      margin: 20px;
+      font-size: 14px;
+      color: #777;
+    }
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .mode-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #2c7aef;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .back-btn {
+      background-color: #6c757d;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+    }
+    .clear-btn {
+      background-color: #dc3545;
+    }
+    .typing-indicator {
+      display: inline-block;
+      padding: 10px 15px;
+      background-color: #f1f1f1;
+      border-radius: 18px;
+      border-bottom-left-radius: 5px;
+      margin-bottom: 15px;
+    }
+    body.dark .typing-indicator {
+      background-color: #34495e;
+    }
+    .typing-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #666;
+      margin: 0 2px;
+      animation: typingAnimation 1.4s infinite ease-in-out;
+    }
+    body.dark .typing-dot {
+      background-color: #aaa;
+    }
+    .typing-dot:nth-child(1) {
+      animation-delay: 0s;
+    }
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    @keyframes typingAnimation {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-5px); }
+    }
+  </style>
+</head>
+
+<body>
+  <button class="mode-toggle" onclick="toggleDarkMode()">🌙</button>
+  <button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
+  
+  <div class="container">
+    <div class="subject-header">
+      <div class="subject-icon" id="subjectIcon">📚</div>
+      <div class="subject-info">
+        <h2 id="subjectTitle">Subject</h2>
+        <p id="levelInfo">Level</p>
+      </div>
+    </div>
+    
+    <div class="chat-container" id="chatContainer">
+      <!-- Chat messages will appear here -->
+    </div>
+    
+    <div class="input-area">
+      <textarea id="learningInput" placeholder="Enter your question here..." rows="1"></textarea>
+      <div class="button-group">
+        <button onclick="sendMessage()">Send</button>
+        <button onclick="generateImage()" id="imageBtn">Image</button>
+      </div>
+    </div>
+    
+    <div class="toolbar">
+      <div>
+        <button onclick="exportPDF()">Export as PDF</button>
+        <button class="clear-btn" onclick="clearChat()">Clear Chat</button>
+      </div>
+    </div>
+    
+    <div id="imageOutput"></div>
+  </div>
+  
+  <div id="footer">Built with 💡 using Puter.js</div>
+  
+  <script>
+    const messages = [];
+    let currentLevel = '';
+    let currentSubject = '';
+    let chatHistory = [];
+    
+    // Subject icons mapping
+    const subjectIcons = {
+      'literacy': '🔤',
+      'numeracy': '🔢',
+      'science': '🔍',
+      'arts': '🎨',
+      'math': '➕',
+      'english': '📖',
+      'history': '🏛️',
+      'geography': '🌍',
+      'physics': '⚛️',
+      'chemistry': '🧪',
+      'biology': '🧬',
+      'economics': '💹',
+      'literature': '📚'
+    };
+    
+    // Subject descriptions for relevance checking
+    const subjectDescriptions = {
+      'literacy': 'reading, writing, phonics, letters, words, sentences, storytelling',
+      'numeracy': 'counting, numbers, addition, subtraction, shapes, patterns, measurements',
+      'science': 'animals, plants, weather, nature, basic scientific concepts',
+      'arts': 'drawing, painting, music, crafts, creative expression',
+      'math': 'mathematics, arithmetic, algebra, geometry, calculus, trigonometry, statistics',
+      'english': 'grammar, composition, reading comprehension, vocabulary, writing skills',
+      'history': 'historical events, civilizations, timelines, important figures, world history',
+      'geography': 'maps, countries, capitals, landforms, climates, cultures',
+      'physics': 'motion, forces, energy, electricity, magnetism, thermodynamics, waves',
+      'chemistry': 'elements, compounds, reactions, atoms, molecules, periodic table',
+      'biology': 'cells, organisms, ecosystems, genetics, human body, plants, animals',
+      'economics': 'supply and demand, markets, finance, microeconomics, macroeconomics',
+      'literature': 'books, novels, poems, literary analysis, authors, themes, characters'
+    };
+    
+    // Level names for display
+    const levelNames = {
+      'early': 'Early Years',
+      'primary': 'Primary School',
+      'junior': 'Junior Secondary',
+      'senior': 'Senior Secondary'
+    };
+    
+    // Subject names for display
+    const subjectNames = {
+      'literacy': 'Early Literacy',
+      'numeracy': 'Numeracy',
+      'science': 'Science',
+      'arts': 'Creative Arts',
+      'math': 'Mathematics',
+      'english': 'English',
+      'history': 'History',
+      'geography': 'Geography',
+      'physics': 'Physics',
+      'chemistry': 'Chemistry',
+      'biology': 'Biology',
+      'economics': 'Economics',
+      'literature': 'Literature'
+    };
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+    }
+    
+    // Initialize page
+    function initPage() {
+      // Check for dark mode preference
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark');
+      }
+      
+      // Get level and subject from localStorage
+      currentLevel = localStorage.getItem('learningLevel') || 'early';
+      currentSubject = localStorage.getItem('learningSubject') || 'literacy';
+      
+      // Update page title and header
+      document.getElementById('subjectTitle').textContent = subjectNames[currentSubject] || 'Subject';
+      document.getElementById('levelInfo').textContent = levelNames[currentLevel] || 'Level';
+      document.getElementById('subjectIcon').textContent = subjectIcons[currentSubject] || '📚';
+      document.title = `${subjectNames[currentSubject]} - AI Learning Assistant`;
+      
+      // Load chat history from localStorage
+      loadChatHistory();
+      
+      // Set up textarea auto-resize
+      const textarea = document.getElementById('learningInput');
+      textarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+      });
+      
+      // Set up Enter key to send message
+      textarea.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+      
+      // Add welcome message if chat is empty
+      if (chatHistory.length === 0) {
+        addBotMessage(`Hello! I'm your ${subjectNames[currentSubject]} tutor for ${levelNames[currentLevel]}. How can I help you today?`);
+      }
+    }
+    
+    function loadChatHistory() {
+      const savedChat = localStorage.getItem(`chatHistory_${currentSubject}_${currentLevel}`);
+      if (savedChat) {
+        chatHistory = JSON.parse(savedChat);
+        renderChatHistory();
+      }
+    }
+    
+    function saveChatHistory() {
+      localStorage.setItem(`chatHistory_${currentSubject}_${currentLevel}`, JSON.stringify(chatHistory));
+    }
+    
+    function renderChatHistory() {
+      const chatContainer = document.getElementById('chatContainer');
+      chatContainer.innerHTML = '';
+      
+      chatHistory.forEach(item => {
+        if (item.type === 'user') {
+          addUserMessage(item.content, false);
+        } else if (item.type === 'bot') {
+          addBotMessage(item.content, false);
+        } else if (item.type === 'image') {
+          addImageMessage(item.content, false);
+        }
+      });
+    }
+    
+    function addUserMessage(message, saveToHistory = true) {
+      const chatContainer = document.getElementById('chatContainer');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message user-message';
+      messageDiv.textContent = message;
+      chatContainer.appendChild(messageDiv);
+      
+      if (saveToHistory) {
+        chatHistory.push({
+          type: 'user',
+          content: message,
+          timestamp: new Date().toISOString()
+        });
+        saveChatHistory();
+      }
+      
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    function addBotMessage(message, saveToHistory = true) {
+      const chatContainer = document.getElementById('chatContainer');
+      
+      // Remove any typing indicator
+      const typingIndicator = document.querySelector('.typing-indicator');
+      if (typingIndicator) {
+        typingIndicator.remove();
+      }
+      
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message bot-message';
+      
+      // Process message for LaTeX and other formatting
+      messageDiv.innerHTML = message.replace(/\n/g, '<br>');
+      
+      chatContainer.appendChild(messageDiv);
+      
+      if (saveToHistory) {
+        chatHistory.push({
+          type: 'bot',
+          content: message,
+          timestamp: new Date().toISOString()
+        });
+        saveChatHistory();
+      }
+      
+      // Render MathJax if present
+      if (message.includes('\\(') || message.includes('\\[')) {
+        MathJax.typesetPromise([messageDiv]).catch(err => console.log('MathJax error:', err));
+      }
+      
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    function addImageMessage(imageUrl, saveToHistory = true) {
+      const chatContainer = document.getElementById('chatContainer');
+      
+      const containerDiv = document.createElement('div');
+      containerDiv.className = 'message bot-message';
+      
+      const img = document.createElement('img');
+      img.src = imageUrl;
+      img.alt = "Generated Diagram";
+      img.style.maxWidth = "100%";
+      
+      containerDiv.appendChild(img);
+      chatContainer.appendChild(containerDiv);
+      
+      if (saveToHistory) {
+        chatHistory.push({
+          type: 'image',
+          content: imageUrl,
+          timestamp: new Date().toISOString()
+        });
+        saveChatHistory();
+      }
+      
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    function showTypingIndicator() {
+      const chatContainer = document.getElementById('chatContainer');
+      
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'typing-indicator';
+      typingDiv.innerHTML = `
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+      `;
+      
+      chatContainer.appendChild(typingDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    async function sendMessage() {
+      const inputElement = document.getElementById('learningInput');
+      const question = inputElement.value.trim();
+      
+      if (!question) {
+        alert("Please enter a question.");
+        return;
+      }
+      
+      // Add user message to chat
+      addUserMessage(question);
+      inputElement.value = '';
+      inputElement.style.height = 'auto';
+      
+      // Show typing indicator
+      showTypingIndicator();
+      
+      try {
+        let systemPrompt = `
+        You are a ${levelNames[currentLevel]} ${subjectNames[currentSubject]} tutor. 
+        Before answering any question, you MUST follow these rules:
+        
+        1. FIRST analyze if the question is relevant to ${subjectNames[currentSubject]} (${subjectDescriptions[currentSubject]}).
+        2. IF the question is relevant:
+           - For STEM subjects, use the I.S.E.E method (Identify, Setup, Execute, Evaluate)
+           - For humanities, provide structured analysis
+           - For early years, use simple language with emojis
+           - Always provide age-appropriate explanations
+        3. IF the question is NOT relevant:
+           - Politely explain why it's not relevant to ${subjectNames[currentSubject]}
+           - Suggest the most appropriate subject(s) for this question
+           - Do NOT answer the question itself
+        
+        Current subject: ${subjectNames[currentSubject]} (${subjectDescriptions[currentSubject]})
+        Current level: ${levelNames[currentLevel]}
+        `;
+        
+        // Add subject-specific guidance
+        if (currentSubject === 'math' || currentSubject === 'numeracy') {
+          systemPrompt += `\nMath-specific: Show step-by-step working. Use LaTeX for math: \\(x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}\\)`;
+        } else if (['physics','chemistry','biology','science'].includes(currentSubject)) {
+          systemPrompt += `\nScience-specific: Explain concepts with real-world examples. Use proper terminology.`;
+        } else if (['english','literature','literacy'].includes(currentSubject)) {
+          systemPrompt += `\nLanguage-specific: Provide clear explanations of grammar and literary elements.`;
+        }
+
+        const response = await puter.ai.chat([
+          {
+            role: "system",
+            content: systemPrompt
+          },
+          {
+            role: "user",
+            content: question
+          }
+        ]);
+
+        addBotMessage(response.message.content);
+      } catch (error) {
+        addBotMessage("❌ Error: " + error.message);
+      }
+    }
+
+    async function generateImage() {
+      const inputElement = document.getElementById('learningInput');
+      const prompt = inputElement.value.trim();
+      
+      if (!prompt) {
+        alert("Please enter a description for the image.");
+        return;
+      }
+
+      // Disable button during generation
+      const imageBtn = document.getElementById('imageBtn');
+      imageBtn.disabled = true;
+      imageBtn.textContent = "Generating...";
+      
+      // Add user message to chat
+      addUserMessage(`[Requested image]: ${prompt}`);
+      inputElement.value = '';
+      inputElement.style.height = 'auto';
+      
+      // Show typing indicator
+      showTypingIndicator();
+      
+      try {
+        // First check if the prompt is relevant to the subject
+        const relevanceCheck = await puter.ai.chat([
+          {
+            role: "system",
+            content: `Determine if this prompt is relevant to ${subjectNames[currentSubject]} (${subjectDescriptions[currentSubject]}). 
+                     Respond ONLY with "relevant" or "not relevant". Prompt: ${prompt}`
+          }
+        ]);
+        
+        if (relevanceCheck.message.content.toLowerCase().includes("not relevant")) {
+          addBotMessage(`This doesn't seem related to ${subjectNames[currentSubject]}. 
+                       Please ask about ${subjectDescriptions[currentSubject]}.`);
+          return;
+        }
+        
+        let enhancedPrompt = `Educational ${currentSubject} diagram for ${levelNames[currentLevel]}: ${prompt}`;
+        const image = await puter.ai.images.generate(enhancedPrompt);
+        addImageMessage(image.url);
+      } catch (err) {
+        addBotMessage("❌ Error generating image: " + err.message);
+      } finally {
+        imageBtn.disabled = false;
+        imageBtn.textContent = "Image";
+      }
+    }
+
+    function exportPDF() {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF();
+      
+      // Add header with subject and level
+      pdf.setFontSize(16);
+      pdf.text(`${subjectNames[currentSubject]} (${levelNames[currentLevel]})`, 10, 10);
+      pdf.setFontSize(12);
+      
+      let yPosition = 20;
+      
+      // Add all chat messages to PDF
+      chatHistory.forEach(item => {
+        if (item.type === 'user') {
+          pdf.setFont(undefined, 'bold');
+          pdf.text(`You: ${item.content}`, 10, yPosition);
+          yPosition += 10;
+        } else if (item.type === 'bot') {
+          pdf.setFont(undefined, 'normal');
+          const splitText = pdf.splitTextToSize(`Tutor: ${item.content}`, 180);
+          pdf.text(splitText, 10, yPosition);
+          yPosition += splitText.length * 7;
+        }
+        
+        // Add space between messages
+        yPosition += 5;
+        
+        // Add new page if needed
+        if (yPosition > 280) {
+          pdf.addPage();
+          yPosition = 20;
+        }
+      });
+      
+      pdf.save(`${subjectNames[currentSubject]}_chat_history.pdf`);
+    }
+    
+    function clearChat() {
+      if (confirm("Are you sure you want to clear the chat history?")) {
+        chatHistory = [];
+        saveChatHistory();
+        document.getElementById('chatContainer').innerHTML = '';
+        addBotMessage(`Hello! I'm your ${subjectNames[currentSubject]} tutor for ${levelNames[currentLevel]}. How can I help you today?`);
+      }
+    }
+    
+    // Initialize the page when loaded
+    window.onload = initPage;
+  </script>
+</body>
+</html>
