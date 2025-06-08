@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Curriculum Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a0ca3;
+      --primary-light: #e0e8ff;
+      --secondary: #f72585;
+      --bg-light: #f8f9fa;
+      --bg-dark: #121212;
+      --text-light: #333;
+      --text-dark: #f8f9fa;
+      --card-light: #ffffff;
+      --card-dark: #1e1e1e;
+      --success: #4cc9f0;
+      --warning: #f8961e;
+      --error: #ef233c;
+      --radius: 16px;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-light);
+      min-height: 100vh;
+      transition: var(--transition);
+      line-height: 1.6;
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    .premium-container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+    }
+
+    .mode-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+      z-index: 100;
+    }
+
+    .mode-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    .premium-header {
+      text-align: center;
+      padding: 30px 0;
+      position: relative;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .premium-header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .premium-header p {
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--text-light);
+      opacity: 0.8;
+      max-width: 700px;
+      margin: 0 auto 30px;
+    }
+
+    body.dark .premium-header p {
+      color: var(--text-dark);
+    }
+
+    .trial-banner {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 15px;
+      text-align: center;
+      margin-bottom: 30px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      max-width: 800px;
+      margin: 0 auto 40px;
+    }
+
+    .trial-banner.trial-active {
+      background: linear-gradient(135deg, var(--success), #2a9d8f);
+      animation: pulse 2s infinite;
+    }
+
+    .trial-banner.trial-expired {
+      background: linear-gradient(135deg, var(--warning), var(--error));
+    }
+
+    .trial-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255,255,255,0.3) 0%,
+        rgba(255,255,255,0) 60%
+      );
+      transform: rotate(30deg);
+      animation: shine 3s infinite;
+    }
+
+    .trial-banner h3 {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .trial-banner p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .trial-banner .timer {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-top: 10px;
+      display: inline-block;
+      padding: 5px 15px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 20px;
+    }
+
+    .curriculum-grid {
+      display: grid;
+      gap: 25px;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
+
+    .curriculum-level {
+      background: var(--card-light);
+      border-radius: var(--radius);
+      padding: 30px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    body.dark .curriculum-level {
+      background: var(--card-dark);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .curriculum-level:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+    }
+
+    .curriculum-level::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: var(--transition);
+    }
+
+    .curriculum-level:hover::before {
+      height: 6px;
+    }
+
+    .curriculum-level h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 0;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid rgba(67, 97, 238, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .curriculum-item {
+      margin: 20px 0;
+      padding: 20px;
+      background: rgba(67, 97, 238, 0.05);
+      border-radius: var(--radius);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    body.dark .curriculum-item {
+      background: rgba(67, 97, 238, 0.1);
+    }
+
+    .curriculum-item:hover {
+      transform: translateX(5px);
+      background: rgba(67, 97, 238, 0.1);
+    }
+
+    body.dark .curriculum-item:hover {
+      background: rgba(67, 97, 238, 0.2);
+    }
+
+    .curriculum-item h3 {
+      font-size: 1.2rem;
+      margin-top: 0;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .curriculum-item p {
+      color: var(--text-light);
+      margin-bottom: 0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    body.dark .curriculum-item p {
+      color: #a0a0a0;
+    }
+
+    .premium-locked {
+      text-align: center;
+      padding: 40px;
+      grid-column: 1 / -1;
+      background: var(--card-light);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    body.dark .premium-locked {
+      background: var(--card-dark);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .premium-locked i {
+      font-size: 3.5rem;
+      color: var(--primary);
+      margin-bottom: 25px;
+      background: rgba(67, 97, 238, 0.1);
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .premium-locked h3 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      color: var(--primary);
+    }
+
+    .premium-locked p {
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 30px;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    body.dark .premium-locked p {
+      color: var(--text-dark);
+    }
+
+    .premium-locked button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 15px 35px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: var(--transition);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .premium-locked button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .btn-back {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+      padding: 12px 25px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-top: 40px;
+    }
+
+    .btn-back:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .premium-footer {
+      margin-top: 60px;
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark .premium-footer {
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { 
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shine {
+      to {
+        transform: translateX(100%) rotate(30deg);
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .premium-header h1 {
+        font-size: 2rem;
+      }
+      
+      .premium-header p {
+        font-size: 1rem;
+      }
+      
+      .premium-container {
+        padding: 15px;
+      }
+      
+      .curriculum-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .curriculum-level {
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="mode-toggle" onclick="toggleDarkMode()">
+    <i class="fas fa-moon"></i>
+  </button>
+  
+  <div class="premium-container">
+    <div class="premium-header">
+      <h1><i class="fas fa-crown"></i> Premium Curriculum Portal</h1>
+      <p>Access structured learning plans, weekly goals, and comprehensive curriculum guides designed by education experts</p>
+    </div>
+
+    <div class="trial-banner" id="trialBanner">
+      <!-- Trial status will be shown here -->
+    </div>
+    
+    <div class="curriculum-grid" id="curriculumGrid">
+      <!-- Curriculum content will be loaded here -->
+    </div>
+    
+    <div class="premium-footer">
+      <button class="btn-back" onclick="window.history.back()">
+        <i class="fas fa-arrow-left"></i> Back to Main
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Initialize premium page
+    function initPremiumPage() {
+      checkTrialStatus();
+      loadCurriculumContent();
+      
+      // Check for saved dark mode preference
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark');
+        const icon = document.querySelector('.mode-toggle i');
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      }
+    }
+
+    function checkTrialStatus() {
+      const trialEndDate = localStorage.getItem('trialEndDate');
+      const banner = document.getElementById('trialBanner');
+      
+      if (trialEndDate) {
+        const endDate = new Date(trialEndDate);
+        const now = new Date();
+        
+        if (now < endDate) {
+          // Trial is active
+          const diff = endDate - now;
+          const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+          
+          banner.className = 'trial-banner trial-active';
+          banner.innerHTML = `
+            <h3><i class="fas fa-unlock-alt"></i> Premium Trial Active</h3>
+            <p>You have full access to all premium curriculum features</p>
+            <div class="timer">${days} days ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} remaining</div>
+          `;
+          return true;
+        } else {
+          // Trial expired
+          banner.className = 'trial-banner trial-expired';
+          banner.innerHTML = `
+            <h3><i class="fas fa-hourglass-end"></i> Trial Expired</h3>
+            <p>Your free trial has ended. Renew to continue accessing premium features</p>
+            <button class="btn-primary" onclick="startFreeTrial()" style="margin-top: 10px; padding: 8px 20px; font-size: 0.9rem;">Renew Free Trial</button>
+          `;
+          return false;
+        }
+      } else {
+        // No trial
+        banner.className = 'trial-banner';
+        banner.innerHTML = `
+          <h3><i class="fas fa-gift"></i> Start Your Free Trial</h3>
+          <p>Unlock premium curriculum and structured learning plans</p>
+          <button class="btn-primary" onclick="startFreeTrial()" style="margin-top: 10px; padding: 8px 20px; font-size: 0.9rem;">Start Free Trial</button>
+        `;
+        return false;
+      }
+    }
+
+    function loadCurriculumContent() {
+      const grid = document.getElementById('curriculumGrid');
+      const hasAccess = checkTrialStatus();
+      
+      if (!hasAccess) {
+        grid.innerHTML = `
+          <div class="premium-locked">
+            <i class="fas fa-lock"></i>
+            <h3>Premium Content Locked</h3>
+            <p>Start your free trial to access structured curriculum, lesson plans, and progress tracking features designed to enhance your learning experience.</p>
+            <button onclick="startFreeTrial()">
+              <i class="fas fa-gift"></i> Start Free Trial
+            </button>
+          </div>
+        `;
+        return;
+      }
+      
+      // Load curriculum content
+      grid.innerHTML = `
+        <div class="curriculum-level">
+          <h2><i class="fas fa-baby"></i> Early Years (Ages 3-5)</h2>
+          <div class="curriculum-item">
+            <h3><i class="fas fa-paint-brush"></i> Creative Arts</h3>
+            <p>Developmentally appropriate art activities and sensory play with weekly lesson plans</p>
+          </div>
+          <div class="curriculum-item">
+            <h3><i class="fas fa-book"></i> Early Literacy</h3>
+            <p>Phonemic awareness, storytelling, and pre-writing skills with daily exercises</p>
+          </div>
+          <div class="curriculum-item">
+            <h3><i class="fas fa-shapes"></i> Math Foundations</h3>
+            <p>Counting, shapes, patterns, and sorting activities with progress tracking</p>
+          </div>
+          <div class="curriculum-item">
+            <h3><i class="fas fa-music"></i> Music & Movement</h3>
+            <p>Rhythm activities, song learning, and physical coordination development</p>
+          </div>
+        </div>
+        
+        <div class="curriculum-level">
+          <h2><i class="fas fa-child"></i> Primary (Ages 6-11)</h2>
+          <div class="curriculum-item">
+            <h3><i class="fas fa-language"></i> Language Arts</h3>
+            <p>Reading comprehension, writing skills, and grammar with weekly challenges</p>
+          </div>
+          <div class="curriculum-item">
+            <h3><i class="fas fa-calculator"></i> Mathematics</h3>
+            <p>Number operations, fractions, and problem-solving with interactive tools</p>
+          </div>
+          <div class="curriculum-item">
+            <h3><i class="fas fa-flask"></i> Science</h3>
+            <p>Hands-on experiments and scientific inquiry with video demonstrations</p>
+          </div>
+          <div class="curriculum-item">
+            <h3><i class="fas fa-globe"></i> Social Studies</h3>
+            <p>Community awareness, geography, and historical events exploration</p>
+          </div>
+        </div>
+        
+        <div class="curriculum-level">
+          <h2><i class="fas fa-user-graduate"></i> Secondary (Ages 12-18)</h2>
+          <div class="curriculum-item">
+            <h3><i class="fas fa-atom"></i> Advanced STEM</h3>
+            <p>Algebra, geometry, physics, and chemistry with real-world applications</p>
+          </div>
+          <div class="curriculum-item">
+            <h3><i class="fas fa-globe-americas"></i> Humanities</h3>
+            <p>Literature analysis, history, and social studies with critical thinking exercises</p>
+          </div>
+          <div class="curriculum-item">
+            <h3><i class="fas fa-graduation-cap"></i> College Prep</h3>
+            <p>Test preparation, academic writing, and research skills development</p>
+          </div>
+          <div class="curriculum-item">
+            <h3><i class="fas fa-laptop-code"></i> Technology</h3>
+            <p>Coding fundamentals, digital literacy, and technology applications</p>
+          </div>
+        </div>
+        
+        <div class="curriculum-level">
+          <h2><i class="fas fa-chart-line"></i> Learning Tools</h2>
+          <div class="curriculum-item">
+            <h3><i class="fas fa-clipboard-check"></i> Assessment Tools</h3>
+            <p>Customizable rubrics, quizzes, and evaluation forms with analytics</p>
+          </div>
+          <div class="curriculum-item">
+            <h3><i class="fas fa-chart-pie"></i> Analytics Dashboard</h3>
+            <p>Visual progress reports, skill mastery tracking, and learning insights</p>
+          </div>
+          <div class="curriculum-item">
+            <h3><i class="fas fa-calendar-alt"></i> Lesson Planning</h3>
+            <p>Customizable templates, scheduling tools, and resource organization</p>
+          </div>
+          <div class="curriculum-item">
+            <h3><i class="fas fa-trophy"></i> Achievement System</h3>
+            <p>Badges, certificates, and milestones to celebrate learning progress</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function startFreeTrial() {
+      const now = new Date();
+      const endDate = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000); // 14-day trial
+      
+      localStorage.setItem('trialEndDate', endDate.toISOString());
+      
+      // Reload the content to show unlocked features
+      checkTrialStatus();
+      loadCurriculumContent();
+      
+      // Show success message
+      alert('🎉 Your 14-day free trial has started! Enjoy full access to premium curriculum features.');
+    }
+
+    // Dark mode toggle
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+      
+      const icon = document.querySelector('.mode-toggle i');
+      if (document.body.classList.contains('dark')) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      }
+    }
+
+    window.onload = initPremiumPage;
+  </script>
+</body>
+</html>
