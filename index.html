@@ -175,6 +175,18 @@
       color: var(--text-dark);
     }
 
+    .premium-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
     .mode-toggle {
       position: fixed;
       top: 20px;
@@ -199,6 +211,279 @@
       transform: scale(1.1);
     }
 
+    /* Trial Banner */
+    .trial-banner {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 15px;
+      text-align: center;
+      margin-bottom: 30px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .trial-banner.trial-active {
+      background: linear-gradient(135deg, var(--success), #2a9d8f);
+      animation: pulse 2s infinite;
+    }
+
+    .trial-banner.trial-expired {
+      background: linear-gradient(135deg, var(--warning), var(--error));
+    }
+
+    .trial-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255,255,255,0.3) 0%,
+        rgba(255,255,255,0) 60%
+      );
+      transform: rotate(30deg);
+      animation: shine 3s infinite;
+    }
+
+    .trial-banner h3 {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .trial-banner p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      position: relative;
+    }
+
+    .trial-banner .timer {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-top: 10px;
+      display: inline-block;
+      padding: 5px 15px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 20px;
+    }
+
+    /* Premium Feature Card */
+    .premium-feature {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .premium-feature::after {
+      content: 'Premium Curriculum';
+      position: absolute;
+      top: 10px;
+      right: -30px;
+      background: var(--primary);
+      color: white;
+      padding: 3px 30px;
+      transform: rotate(45deg);
+      font-size: 0.7rem;
+      font-weight: bold;
+    }
+
+    /* Locked State */
+    .locked-feature {
+      position: relative;
+      filter: grayscale(0.8);
+      opacity: 0.8;
+      cursor: not-allowed;
+    }
+
+    .locked-feature::after {
+      content: '\f023';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      color: var(--primary);
+      background: var(--card-light);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+      z-index: 2;
+    }
+
+    body.dark .locked-feature::after {
+      background: var(--card-dark);
+    }
+
+    .locked-feature::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.7);
+      z-index: 1;
+    }
+
+    body.dark .locked-feature::before {
+      background: rgba(0,0,0,0.7);
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .trial-modal {
+      background: var(--card-light);
+      width: 90%;
+      max-width: 500px;
+      border-radius: var(--radius);
+      padding: 30px;
+      box-shadow: var(--shadow);
+      transform: translateY(20px);
+      transition: var(--transition);
+      text-align: center;
+      position: relative;
+    }
+
+    .modal-overlay.active .trial-modal {
+      transform: translateY(0);
+    }
+
+    body.dark .trial-modal {
+      background: var(--card-dark);
+    }
+
+    .trial-modal h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--primary);
+    }
+
+    .trial-modal p {
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .trial-modal .btn-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+
+    .trial-modal button {
+      padding: 12px 25px;
+      border-radius: var(--radius);
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      min-width: 180px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: rgba(67, 97, 238, 0.1);
+    }
+
+    /* Curriculum Section */
+    .curriculum-section {
+      background: var(--card-light);
+      border-radius: var(--radius);
+      padding: 25px;
+      margin-top: 30px;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    body.dark .curriculum-section {
+      background: var(--card-dark);
+    }
+
+    .curriculum-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .curriculum-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .curriculum-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .curriculum-item {
+      background: rgba(67, 97, 238, 0.1);
+      padding: 15px;
+      border-radius: var(--radius);
+      transition: var(--transition);
+    }
+
+    body.dark .curriculum-item {
+      background: rgba(67, 97, 238, 0.2);
+    }
+
+    .curriculum-item:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+
+    .curriculum-item h4 {
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
     /* Animations */
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -213,6 +498,18 @@
       to { 
         opacity: 1;
         transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shine {
+      to {
+        transform: translateX(100%) rotate(30deg);
       }
     }
 
@@ -237,6 +534,15 @@
       .subject-card {
         padding: 20px;
       }
+
+      .trial-modal button {
+        min-width: 140px;
+        padding: 10px 15px;
+      }
+
+      .curriculum-content {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 480px) {
@@ -251,6 +557,14 @@
       .level-title {
         font-size: 1.3rem;
       }
+
+      .btn-group {
+        flex-direction: column;
+      }
+
+      .trial-modal button {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -264,6 +578,13 @@
       <h1><i class="fas fa-graduation-cap"></i> AI Learning Assistant</h1>
       <h2>Select your education level and subject to begin</h2>
     </header>
+
+    <!-- Trial Banner - Dynamically updated by JavaScript -->
+    <div class="trial-banner" id="trialBanner">
+      <h3><i class="fas fa-gift"></i> Start Your 2-Week Free Trial</h3>
+      <p>Unlock premium curriculum and structured learning plans</p>
+      <button class="btn-primary" onclick="startFreeTrial()" style="margin-top: 10px; padding: 8px 20px; font-size: 0.9rem;">Start Free Trial</button>
+    </div>
     
     <div class="level-section">
       <div class="level-title">Early Years (Ages 3-6)</div>
@@ -289,9 +610,8 @@
           <div class="subject-desc">Drawing, music, crafts and creative expression</div>
         </div>
       </div>
-    </div>
-    
-    <div class="level-section">
+      
+      <div class="level-section">
       <div class="level-title">Primary School (Ages 6-12)</div>
       <div class="subject-grid">
         <div class="subject-card" onclick="selectSubject('primary', 'math')">
@@ -368,9 +688,225 @@
         </div>
       </div>
     </div>
+    
+    
+    
+
+      <!-- Curriculum Section (Premium Feature) -->
+      <div class="curriculum-section" id="early-curriculum">
+        <div class="curriculum-header">
+          <div class="curriculum-title">
+            <i class="fas fa-graduation-cap"></i> Early Years Curriculum
+          </div>
+          <div class="premium-badge">Premium</div>
+        </div>
+        <div class="curriculum-content">
+          <div class="curriculum-item">
+            <h4>Literacy Roadmap</h4>
+            <p>Structured 12-week program covering phonics, sight words, and reading comprehension</p>
+          </div>
+          <div class="curriculum-item">
+            <h4>Numeracy Plan</h4>
+            <p>Step-by-step guide to counting, shapes, and early math concepts</p>
+          </div>
+          <div class="curriculum-item">
+            <h4>Science Exploration</h4>
+            <p>Weekly themed activities for nature and science discovery</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- More level sections with curriculum sections -->
+    
+    <!-- Trial Modal -->
+    <div class="modal-overlay" id="trialModal">
+      <div class="trial-modal">
+        <h3><i class="fas fa-crown"></i> Premium Curriculum</h3>
+        <p>Access structured learning plans, weekly goals, and comprehensive curriculum guides.</p>
+        <p>Start your 2-week free trial to unlock all premium content.</p>
+        <div class="btn-group">
+          <button class="btn-primary" onclick="startFreeTrial()">
+            <i class="fas fa-gift"></i> Start Free Trial
+          </button>
+          <button class="btn-outline" onclick="hideTrialModal()">
+            <i class="fas fa-times"></i> Maybe Later
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trial Expired Modal -->
+    <div class="modal-overlay" id="expiredModal">
+      <div class="trial-modal">
+        <h3><i class="fas fa-hourglass-end"></i> Trial Expired</h3>
+        <p>Your free trial has ended. Upgrade to continue accessing premium curriculum features.</p>
+        <div class="btn-group">
+          <button class="btn-primary" onclick="startFreeTrial()">
+            <i class="fas fa-sync-alt"></i> Restart Trial
+          </button>
+          <button class="btn-outline" onclick="hideExpiredModal()">
+            <i class="fas fa-times"></i> Close
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
+    // Trial system variables
+    let trialEndDate = localStorage.getItem('trialEndDate');
+    let trialActive = false;
+    const premiumFeatures = [
+      'early-curriculum',
+      'primary-curriculum',
+      'junior-curriculum',
+      'senior-curriculum'
+    ];
+
+    // Check trial status on page load
+    function checkTrialStatus() {
+      if (trialEndDate) {
+        const now = new Date();
+        const endDate = new Date(trialEndDate);
+        
+        if (now < endDate) {
+          // Trial is active
+          trialActive = true;
+          updateTrialUI(true);
+          startTrialTimer();
+        } else {
+          // Trial has expired
+          trialActive = false;
+          localStorage.removeItem('trialEndDate');
+          updateTrialUI(false);
+          showExpiredModal();
+        }
+      } else {
+        // No trial exists
+        trialActive = false;
+        updateTrialUI(false);
+      }
+    }
+
+    // Start free trial
+    function startFreeTrial() {
+      const now = new Date();
+      const endDate = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000); // 14 days from now
+      
+      localStorage.setItem('trialEndDate', endDate.toISOString());
+      trialEndDate = endDate.toISOString();
+      trialActive = true;
+      
+      updateTrialUI(true);
+      startTrialTimer();
+      hideTrialModal();
+      hideExpiredModal();
+      
+      // Show success message
+      alert('🎉 Your 2-week free trial has started! Enjoy full access to premium curriculum features.');
+    }
+
+    // Update UI based on trial status
+    function updateTrialUI(isActive) {
+      const trialBanner = document.getElementById('trialBanner');
+      
+      if (isActive) {
+        // Trial is active - show timer
+        trialBanner.className = 'trial-banner trial-active';
+        trialBanner.innerHTML = `
+          <h3><i class="fas fa-unlock-alt"></i> Trial Active</h3>
+          <p>You have full access to premium curriculum features</p>
+          <div class="timer" id="trialTimer">14 days 00:00:00 remaining</div>
+        `;
+        
+        // Unlock all premium features
+        premiumFeatures.forEach(id => {
+          const element = document.getElementById(id);
+          if (element) {
+            element.classList.remove('locked-feature');
+          }
+        });
+      } else {
+        // Trial not active
+        trialBanner.className = 'trial-banner';
+        trialBanner.innerHTML = `
+          <h3><i class="fas fa-gift"></i> Start Your 2-Week Free Trial</h3>
+          <p>Unlock premium curriculum and structured learning plans</p>
+          <button class="btn-primary" onclick="startFreeTrial()" style="margin-top: 10px; padding: 8px 20px; font-size: 0.9rem;">Start Free Trial</button>
+        `;
+        
+        // Lock premium features
+        premiumFeatures.forEach(id => {
+          const element = document.getElementById(id);
+          if (element) {
+            element.classList.add('locked-feature');
+            element.onclick = showTrialModal;
+          }
+        });
+      }
+    }
+
+    // Timer for trial countdown
+    function startTrialTimer() {
+      if (!trialEndDate) return;
+      
+      function updateTimer() {
+        const now = new Date();
+        const endDate = new Date(trialEndDate);
+        const diff = endDate - now;
+        
+        if (diff <= 0) {
+          // Trial expired
+          document.getElementById('trialTimer').textContent = 'Trial expired';
+          localStorage.removeItem('trialEndDate');
+          trialActive = false;
+          updateTrialUI(false);
+          showExpiredModal();
+          return;
+        }
+        
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        document.getElementById('trialTimer').textContent = 
+          `${days} days ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} remaining`;
+      }
+      
+      updateTimer();
+      setInterval(updateTimer, 1000);
+    }
+
+    // Modal functions
+    function showTrialModal() {
+      document.getElementById('trialModal').classList.add('active');
+    }
+
+    function hideTrialModal() {
+      document.getElementById('trialModal').classList.remove('active');
+    }
+
+    function showExpiredModal() {
+      document.getElementById('expiredModal').classList.add('active');
+    }
+
+    function hideExpiredModal() {
+      document.getElementById('expiredModal').classList.remove('active');
+    }
+
+    // Subject selection (always accessible)
+    function selectSubject(level, subject) {
+      // Store selection in localStorage
+      localStorage.setItem('learningLevel', level);
+      localStorage.setItem('learningSubject', subject);
+      
+      // Redirect to question page
+      window.location.href = 'question.html';
+    }
+
+    // Dark mode toggle
     function toggleDarkMode() {
       document.body.classList.toggle('dark');
       localStorage.setItem('darkMode', document.body.classList.contains('dark'));
@@ -384,35 +920,30 @@
         icon.classList.add('fa-moon');
       }
     }
-    
-    // Check for saved dark mode preference
-    if (localStorage.getItem('darkMode') === 'true') {
-      document.body.classList.add('dark');
-      const icon = document.querySelector('.mode-toggle i');
-      icon.classList.remove('fa-moon');
-      icon.classList.add('fa-sun');
-    }
-    
-    function selectSubject(level, subject) {
-      // Add click animation
-      const card = event.currentTarget;
-      card.style.transform = 'scale(0.95)';
-      setTimeout(() => {
-        card.style.transform = '';
-      }, 200);
+
+    // Initialize the page
+    window.onload = function() {
+      // Check for saved dark mode preference
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark');
+        const icon = document.querySelector('.mode-toggle i');
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      }
       
-      // Store selection in localStorage
-      localStorage.setItem('learningLevel', level);
-      localStorage.setItem('learningSubject', subject);
+      // Initialize trial system
+      checkTrialStatus();
       
-      // Redirect with slight delay for animation
-      setTimeout(() => {
-        window.location.href = 'question.html';
-      }, 300);
-    }
-    
-    // Add hover effects for touch devices
-    document.addEventListener('touchstart', function() {}, true);
+      // Set up premium feature click handlers
+      premiumFeatures.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.onclick = function() {
+            if (!trialActive) showTrialModal();
+          };
+        }
+      });
+    };
   </script>
 </body>
 </html>
