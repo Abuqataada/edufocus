@@ -83,7 +83,7 @@
     }
 
     .level-section {
-      margin-bottom: 40px;
+      margin-bottom: 20px;
       animation: slideUp 0.6s ease-out forwards;
       opacity: 0;
       transform: translateY(20px);
@@ -94,16 +94,146 @@
     .level-section:nth-child(3) { animation-delay: 0.3s; }
     .level-section:nth-child(4) { animation-delay: 0.4s; }
 
-    .level-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 20px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid var(--primary);
-      display: inline-block;
+    /* New Controls Styles */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 20px;
     }
 
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 250px;
+      max-width: 400px;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary);
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 20px 12px 45px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(0,0,0,0.1);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    body.dark .search-box input {
+      background: var(--card-dark);
+      border-color: rgba(255,255,255,0.1);
+      color: var(--text-dark);
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+    }
+
+    .view-toggle {
+      display: flex;
+      background: var(--card-light);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    body.dark .view-toggle {
+      background: var(--card-dark);
+    }
+
+    .view-btn {
+      padding: 10px 15px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      transition: var(--transition);
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    body.dark .view-btn {
+      color: var(--text-dark);
+    }
+
+    .view-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .view-btn i {
+      margin-right: 5px;
+    }
+
+    /* Level Header */
+    .level-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: var(--card-light);
+      border-radius: var(--radius);
+      cursor: pointer;
+      margin-bottom: 15px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    body.dark .level-header {
+      background: var(--card-dark);
+    }
+
+    .level-header:hover {
+      transform: translateY(-2px);
+    }
+
+    .level-toggle {
+      transition: var(--transition);
+    }
+
+    .level-toggle.rotated {
+      transform: rotate(180deg);
+    }
+
+    /* Category Tabs */
+    .category-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .category-tab {
+      padding: 8px 15px;
+      border-radius: 20px;
+      border: none;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+
+    body.dark .category-tab {
+      background: rgba(67, 97, 238, 0.2);
+    }
+
+    .category-tab.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Subject Cards */
     .subject-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -173,6 +303,88 @@
 
     body.dark .subject-desc {
       color: var(--text-dark);
+    }
+
+    /* List View Styles */
+    .subject-list {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .subject-list.active {
+      display: flex;
+    }
+
+    .subject-item {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background: var(--card-light);
+      border-radius: var(--radius);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    body.dark .subject-item {
+      background: var(--card-dark);
+    }
+
+    .subject-item:hover {
+      transform: translateX(5px);
+      box-shadow: var(--shadow);
+    }
+
+    .subject-item-icon {
+      font-size: 1.5rem;
+      margin-right: 15px;
+      color: var(--primary);
+      width: 40px;
+      text-align: center;
+    }
+
+    .subject-item-name {
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .subject-item-desc {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .subject-item-desc {
+        display: block;
+        margin-left: 20px;
+        flex: 2;
+      }
+    }
+
+    /* View More Button */
+    .view-more {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .view-more button {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 15px;
+      border-radius: var(--radius);
+      transition: var(--transition);
+    }
+
+    .view-more button:hover {
+      background: var(--primary-light);
+    }
+
+    body.dark .view-more button:hover {
+      background: rgba(67, 97, 238, 0.2);
     }
 
     .premium-badge {
@@ -430,58 +642,62 @@
       background: rgba(67, 97, 238, 0.1);
     }
 
-    /* Curriculum Section */
-    .curriculum-section {
-      background: var(--card-light);
+    /* Premium Section Styles */
+    .premium-section {
+      margin: 40px 0;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .premium-card {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 30px;
       border-radius: var(--radius);
-      padding: 25px;
-      margin-top: 30px;
+      text-align: center;
       box-shadow: var(--shadow);
       position: relative;
+      overflow: hidden;
     }
 
-    body.dark .curriculum-section {
-      background: var(--card-dark);
+    body.dark .premium-card {
+      background: linear-gradient(135deg, var(--primary-dark), #2a0c7a);
     }
 
-    .curriculum-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .premium-icon {
+      font-size: 3rem;
       margin-bottom: 20px;
+      color: white;
     }
 
-    .curriculum-title {
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: var(--primary);
+    .premium-title {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
     }
 
-    .curriculum-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
+    .premium-description {
+      font-size: 1rem;
+      margin-bottom: 25px;
+      opacity: 0.9;
+      line-height: 1.6;
     }
 
-    .curriculum-item {
-      background: rgba(67, 97, 238, 0.1);
-      padding: 15px;
+    .btn-premium {
+      background: white;
+      color: var(--primary-dark);
+      border: none;
+      padding: 12px 25px;
       border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
       transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    body.dark .curriculum-item {
-      background: rgba(67, 97, 238, 0.2);
-    }
-
-    .curriculum-item:hover {
+    .btn-premium:hover {
       transform: translateY(-3px);
-      box-shadow: var(--shadow);
-    }
-
-    .curriculum-item h4 {
-      color: var(--primary);
-      margin-bottom: 10px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     }
 
     /* Animations */
@@ -540,8 +756,8 @@
         padding: 10px 15px;
       }
 
-      .curriculum-content {
-        grid-template-columns: 1fr;
+      .premium-title {
+        font-size: 1.5rem;
       }
     }
 
@@ -554,16 +770,29 @@
         grid-template-columns: 1fr;
       }
       
-      .level-title {
-        font-size: 1.3rem;
-      }
-
       .btn-group {
         flex-direction: column;
       }
 
       .trial-modal button {
         width: 100%;
+      }
+
+      .premium-card {
+        padding: 20px;
+      }
+      
+      .controls {
+        flex-direction: column;
+      }
+      
+      .search-box {
+        max-width: 100%;
+      }
+      
+      .view-toggle {
+        width: 100%;
+        justify-content: center;
       }
     }
   </style>
@@ -586,138 +815,250 @@
       <button class="btn-primary" onclick="startFreeTrial()" style="margin-top: 10px; padding: 8px 20px; font-size: 0.9rem;">Start Free Trial</button>
     </div>
     
+    <!-- New Controls Section -->
+    <div class="controls">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="subjectSearch" placeholder="Search subjects...">
+      </div>
+      <div class="view-toggle">
+        <button class="view-btn active" data-view="cards"><i class="fas fa-th"></i> Cards</button>
+        <button class="view-btn" data-view="list"><i class="fas fa-list"></i> List</button>
+      </div>
+    </div>
+    
+    <!-- Early Years Section -->
     <div class="level-section">
-      <div class="level-title">Early Years (Ages 3-6)</div>
-      <div class="subject-grid">
-        <div class="subject-card" onclick="selectSubject('early', 'literacy')">
-          <div class="subject-icon"><i class="fas fa-book-open"></i></div>
-          <div class="subject-name">Early Literacy</div>
-          <div class="subject-desc">Reading, writing, phonics and storytelling fundamentals</div>
-        </div>
-        <div class="subject-card" onclick="selectSubject('early', 'numeracy')">
-          <div class="subject-icon"><i class="fas fa-calculator"></i></div>
-          <div class="subject-name">Numeracy</div>
-          <div class="subject-desc">Counting, shapes, patterns and basic math concepts</div>
-        </div>
-        <div class="subject-card" onclick="selectSubject('early', 'science')">
-          <div class="subject-icon"><i class="fas fa-microscope"></i></div>
-          <div class="subject-name">Early Science</div>
-          <div class="subject-desc">Nature, animals, weather and scientific curiosity</div>
-        </div>
-        <div class="subject-card" onclick="selectSubject('early', 'arts')">
-          <div class="subject-icon"><i class="fas fa-paint-brush"></i></div>
-          <div class="subject-name">Creative Arts</div>
-          <div class="subject-desc">Drawing, music, crafts and creative expression</div>
-        </div>
+      <div class="level-header" onclick="toggleLevel('early')">
+        <div class="level-title">Early Years (Ages 3-6)</div>
+        <div class="level-toggle"><i class="fas fa-chevron-down"></i></div>
       </div>
       
-      <div class="level-section">
-      <div class="level-title">Primary School (Ages 6-12)</div>
-      <div class="subject-grid">
-        <div class="subject-card" onclick="selectSubject('primary', 'math')">
-          <div class="subject-icon"><i class="fas fa-square-root-alt"></i></div>
-          <div class="subject-name">Mathematics</div>
-          <div class="subject-desc">Arithmetic, geometry and problem solving</div>
+      <div class="subject-container" id="early-container">
+        <div class="category-tabs">
+          <button class="category-tab active" data-category="all">All</button>
+          <button class="category-tab" data-category="core">Core Subjects</button>
+          <button class="category-tab" data-category="arts">Arts & Creativity</button>
+          <button class="category-tab" data-category="physical">Physical Development</button>
         </div>
-        <div class="subject-card" onclick="selectSubject('primary', 'english')">
-          <div class="subject-icon"><i class="fas fa-language"></i></div>
-          <div class="subject-name">English</div>
-          <div class="subject-desc">Reading, writing, grammar and literature</div>
+        
+        <div class="subject-grid">
+          <div class="subject-card" onclick="selectSubject('early', 'literacy')" data-category="core">
+            <div class="subject-icon"><i class="fas fa-book-open"></i></div>
+            <div class="subject-name">Early Literacy</div>
+            <div class="subject-desc">Reading, writing, phonics and storytelling fundamentals</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('early', 'numeracy')" data-category="core">
+            <div class="subject-icon"><i class="fas fa-calculator"></i></div>
+            <div class="subject-name">Numeracy</div>
+            <div class="subject-desc">Counting, shapes, patterns and basic math concepts</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('early', 'science')" data-category="core">
+            <div class="subject-icon"><i class="fas fa-microscope"></i></div>
+            <div class="subject-name">Early Science</div>
+            <div class="subject-desc">Nature, animals, weather and scientific curiosity</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('early', 'arts')" data-category="arts">
+            <div class="subject-icon"><i class="fas fa-paint-brush"></i></div>
+            <div class="subject-name">Creative Arts</div>
+            <div class="subject-desc">Drawing, music, crafts and creative expression</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('early', 'movement')" data-category="physical">
+            <div class="subject-icon"><i class="fas fa-running"></i></div>
+            <div class="subject-name">Movement Skills</div>
+            <div class="subject-desc">Gross motor development and coordination</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('early', 'social')" data-category="core">
+            <div class="subject-icon"><i class="fas fa-users"></i></div>
+            <div class="subject-name">Social Skills</div>
+            <div class="subject-desc">Communication, sharing and emotional development</div>
+          </div>
         </div>
-        <div class="subject-card" onclick="selectSubject('primary', 'science')">
-          <div class="subject-icon"><i class="fas fa-atom"></i></div>
-          <div class="subject-name">Science</div>
-          <div class="subject-desc">Biology, chemistry, physics and earth science</div>
-        </div>
-        <div class="subject-card" onclick="selectSubject('primary', 'history')">
-          <div class="subject-icon"><i class="fas fa-landmark"></i></div>
-          <div class="subject-name">History</div>
-          <div class="subject-desc">World events, cultures and historical figures</div>
+        
+        <div class="view-more">
+          <button onclick="showAllSubjects('early')">Show all 12 subjects <i class="fas fa-arrow-down"></i></button>
         </div>
       </div>
     </div>
     
+    <!-- Primary School Section -->
     <div class="level-section">
-      <div class="level-title">Junior Secondary (Ages 12-15)</div>
-      <div class="subject-grid">
-        <div class="subject-card" onclick="selectSubject('junior', 'math')">
-          <div class="subject-icon"><i class="fas fa-calculator"></i></div>
-          <div class="subject-name">Mathematics</div>
-          <div class="subject-desc">Algebra, geometry, statistics and probability</div>
+      <div class="level-header" onclick="toggleLevel('primary')">
+        <div class="level-title">Primary School (Ages 6-12)</div>
+        <div class="level-toggle"><i class="fas fa-chevron-down"></i></div>
+      </div>
+      
+      <div class="subject-container" id="primary-container">
+        <div class="category-tabs">
+          <button class="category-tab active" data-category="all">All</button>
+          <button class="category-tab" data-category="core">Core Subjects</button>
+          <button class="category-tab" data-category="humanities">Humanities</button>
+          <button class="category-tab" data-category="arts">Arts</button>
         </div>
-        <div class="subject-card" onclick="selectSubject('junior', 'physics')">
-          <div class="subject-icon"><i class="fas fa-bolt"></i></div>
-          <div class="subject-name">Physics</div>
-          <div class="subject-desc">Motion, energy, forces and fundamental laws</div>
+        
+        <div class="subject-grid">
+          <div class="subject-card" onclick="selectSubject('primary', 'math')" data-category="core">
+            <div class="subject-icon"><i class="fas fa-square-root-alt"></i></div>
+            <div class="subject-name">Mathematics</div>
+            <div class="subject-desc">Arithmetic, geometry and problem solving</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('primary', 'english')" data-category="core">
+            <div class="subject-icon"><i class="fas fa-language"></i></div>
+            <div class="subject-name">English</div>
+            <div class="subject-desc">Reading, writing, grammar and literature</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('primary', 'science')" data-category="core">
+            <div class="subject-icon"><i class="fas fa-atom"></i></div>
+            <div class="subject-name">Science</div>
+            <div class="subject-desc">Biology, chemistry, physics and earth science</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('primary', 'history')" data-category="humanities">
+            <div class="subject-icon"><i class="fas fa-landmark"></i></div>
+            <div class="subject-name">History</div>
+            <div class="subject-desc">World events, cultures and historical figures</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('primary', 'geography')" data-category="humanities">
+            <div class="subject-icon"><i class="fas fa-globe"></i></div>
+            <div class="subject-name">Geography</div>
+            <div class="subject-desc">Maps, countries, and physical landscapes</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('primary', 'art')" data-category="arts">
+            <div class="subject-icon"><i class="fas fa-palette"></i></div>
+            <div class="subject-name">Art</div>
+            <div class="subject-desc">Drawing, painting, and artistic techniques</div>
+          </div>
         </div>
-        <div class="subject-card" onclick="selectSubject('junior', 'chemistry')">
-          <div class="subject-icon"><i class="fas fa-flask"></i></div>
-          <div class="subject-name">Chemistry</div>
-          <div class="subject-desc">Elements, reactions, atoms and molecules</div>
-        </div>
-        <div class="subject-card" onclick="selectSubject('junior', 'biology')">
-          <div class="subject-icon"><i class="fas fa-dna"></i></div>
-          <div class="subject-name">Biology</div>
-          <div class="subject-desc">Cells, organisms, ecosystems and genetics</div>
+        
+        <div class="view-more">
+          <button onclick="showAllSubjects('primary')">Show all 14 subjects <i class="fas fa-arrow-down"></i></button>
         </div>
       </div>
     </div>
     
+    <!-- Junior Secondary Section -->
     <div class="level-section">
-      <div class="level-title">Senior Secondary (Ages 15-18)</div>
-      <div class="subject-grid">
-        <div class="subject-card" onclick="selectSubject('senior', 'math')">
-          <div class="subject-icon"><i class="fas fa-infinity"></i></div>
-          <div class="subject-name">Mathematics</div>
-          <div class="subject-desc">Calculus, trigonometry and advanced algebra</div>
+      <div class="level-header" onclick="toggleLevel('junior')">
+        <div class="level-title">Junior Secondary (Ages 12-15)</div>
+        <div class="level-toggle"><i class="fas fa-chevron-down"></i></div>
+      </div>
+      
+      <div class="subject-container" id="junior-container">
+        <div class="category-tabs">
+          <button class="category-tab active" data-category="all">All</button>
+          <button class="category-tab" data-category="stem">STEM</button>
+          <button class="category-tab" data-category="humanities">Humanities</button>
+          <button class="category-tab" data-category="languages">Languages</button>
         </div>
-        <div class="subject-card" onclick="selectSubject('senior', 'physics')">
-          <div class="subject-icon"><i class="fas fa-rocket"></i></div>
-          <div class="subject-name">Physics</div>
-          <div class="subject-desc">Mechanics, electricity, magnetism and waves</div>
+        
+        <div class="subject-grid">
+          <div class="subject-card" onclick="selectSubject('junior', 'math')" data-category="stem">
+            <div class="subject-icon"><i class="fas fa-calculator"></i></div>
+            <div class="subject-name">Mathematics</div>
+            <div class="subject-desc">Algebra, geometry, statistics and probability</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('junior', 'physics')" data-category="stem">
+            <div class="subject-icon"><i class="fas fa-bolt"></i></div>
+            <div class="subject-name">Physics</div>
+            <div class="subject-desc">Motion, energy, forces and fundamental laws</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('junior', 'chemistry')" data-category="stem">
+            <div class="subject-icon"><i class="fas fa-flask"></i></div>
+            <div class="subject-name">Chemistry</div>
+            <div class="subject-desc">Elements, reactions, atoms and molecules</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('junior', 'biology')" data-category="stem">
+            <div class="subject-icon"><i class="fas fa-dna"></i></div>
+            <div class="subject-name">Biology</div>
+            <div class="subject-desc">Cells, organisms, ecosystems and genetics</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('junior', 'history')" data-category="humanities">
+            <div class="subject-icon"><i class="fas fa-hourglass-half"></i></div>
+            <div class="subject-name">History</div>
+            <div class="subject-desc">Ancient civilizations to modern world history</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('junior', 'geography')" data-category="humanities">
+            <div class="subject-icon"><i class="fas fa-mountain"></i></div>
+            <div class="subject-name">Geography</div>
+            <div class="subject-desc">Physical and human geography concepts</div>
+          </div>
         </div>
-        <div class="subject-card" onclick="selectSubject('senior', 'chemistry')">
-          <div class="subject-icon"><i class="fas fa-vial"></i></div>
-          <div class="subject-name">Chemistry</div>
-          <div class="subject-desc">Organic, inorganic, physical and analytical</div>
-        </div>
-        <div class="subject-card" onclick="selectSubject('senior', 'economics')">
-          <div class="subject-icon"><i class="fas fa-chart-line"></i></div>
-          <div class="subject-name">Economics</div>
-          <div class="subject-desc">Micro, macro, finance and economic theory</div>
+        
+        <div class="view-more">
+          <button onclick="showAllSubjects('junior')">Show all 10 subjects <i class="fas fa-arrow-down"></i></button>
         </div>
       </div>
     </div>
     
-    
-    
-
-      <!-- Curriculum Section (Premium Feature) -->
-      <div class="curriculum-section" id="early-curriculum">
-        <div class="curriculum-header">
-          <div class="curriculum-title">
-            <i class="fas fa-graduation-cap"></i> Early Years Curriculum
-          </div>
-          <div class="premium-badge">Premium</div>
+    <!-- Senior Secondary Section -->
+    <div class="level-section">
+      <div class="level-header" onclick="toggleLevel('senior')">
+        <div class="level-title">Senior Secondary (Ages 15-18)</div>
+        <div class="level-toggle"><i class="fas fa-chevron-down"></i></div>
+      </div>
+      
+      <div class="subject-container" id="senior-container">
+        <div class="category-tabs">
+          <button class="category-tab active" data-category="all">All</button>
+          <button class="category-tab" data-category="stem">STEM</button>
+          <button class="category-tab" data-category="business">Business</button>
+          <button class="category-tab" data-category="humanities">Humanities</button>
         </div>
-        <div class="curriculum-content">
-          <div class="curriculum-item">
-            <h4>Literacy Roadmap</h4>
-            <p>Structured 12-week program covering phonics, sight words, and reading comprehension</p>
+        
+        <div class="subject-grid">
+          <div class="subject-card" onclick="selectSubject('senior', 'math')" data-category="stem">
+            <div class="subject-icon"><i class="fas fa-infinity"></i></div>
+            <div class="subject-name">Mathematics</div>
+            <div class="subject-desc">Calculus, trigonometry and advanced algebra</div>
           </div>
-          <div class="curriculum-item">
-            <h4>Numeracy Plan</h4>
-            <p>Step-by-step guide to counting, shapes, and early math concepts</p>
+          <div class="subject-card" onclick="selectSubject('senior', 'physics')" data-category="stem">
+            <div class="subject-icon"><i class="fas fa-rocket"></i></div>
+            <div class="subject-name">Physics</div>
+            <div class="subject-desc">Mechanics, electricity, magnetism and waves</div>
           </div>
-          <div class="curriculum-item">
-            <h4>Science Exploration</h4>
-            <p>Weekly themed activities for nature and science discovery</p>
+          <div class="subject-card" onclick="selectSubject('senior', 'chemistry')" data-category="stem">
+            <div class="subject-icon"><i class="fas fa-vial"></i></div>
+            <div class="subject-name">Chemistry</div>
+            <div class="subject-desc">Organic, inorganic, physical and analytical</div>
           </div>
+          <div class="subject-card" onclick="selectSubject('senior', 'economics')" data-category="business">
+            <div class="subject-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="subject-name">Economics</div>
+            <div class="subject-desc">Micro, macro, finance and economic theory</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('senior', 'business')" data-category="business">
+            <div class="subject-icon"><i class="fas fa-briefcase"></i></div>
+            <div class="subject-name">Business Studies</div>
+            <div class="subject-desc">Management, marketing and operations</div>
+          </div>
+          <div class="subject-card" onclick="selectSubject('senior', 'literature')" data-category="humanities">
+            <div class="subject-icon"><i class="fas fa-book"></i></div>
+            <div class="subject-name">Literature</div>
+            <div class="subject-desc">Classic and contemporary literary analysis</div>
+          </div>
+        </div>
+        
+        <div class="view-more">
+          <button onclick="showAllSubjects('senior')">Show all 12 subjects <i class="fas fa-arrow-down"></i></button>
         </div>
       </div>
     </div>
     
-    <!-- More level sections with curriculum sections -->
+    <!-- Premium Section -->
+    <div class="premium-section">
+      <div class="premium-card">
+        <div class="premium-icon">
+          <i class="fas fa-crown"></i>
+        </div>
+        <h3 class="premium-title">Premium Curriculum Portal</h3>
+        <p class="premium-description">
+          Access structured learning plans, weekly goals, and comprehensive curriculum guides 
+          designed by education experts.
+        </p>
+        <button class="btn-premium" onclick="window.location.href='premium.html'">
+             <i class="fas fa-arrow-right"></i> Explore Premium Features
+        </button>
+      </div>
+    </div>
     
     <!-- Trial Modal -->
     <div class="modal-overlay" id="trialModal">
@@ -921,6 +1262,101 @@
       }
     }
 
+    // Toggle level sections
+    function toggleLevel(levelId) {
+      const container = document.getElementById(`${levelId}-container`);
+      const toggleIcon = container.previousElementSibling.querySelector('.level-toggle i');
+      
+      container.classList.toggle('collapsed');
+      toggleIcon.classList.toggle('rotated');
+    }
+
+    // Toggle between card and list views
+    function toggleView(viewType) {
+      const allGrids = document.querySelectorAll('.subject-grid');
+      const allLists = document.querySelectorAll('.subject-list');
+      const viewButtons = document.querySelectorAll('.view-btn');
+      
+      viewButtons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      if (viewType === 'list') {
+        allGrids.forEach(grid => grid.style.display = 'none');
+        allLists.forEach(list => list.style.display = 'flex');
+      } else {
+        allGrids.forEach(grid => grid.style.display = 'grid');
+        allLists.forEach(list => list.style.display = 'none');
+      }
+    }
+
+    // Filter subjects by category
+    function filterSubjects(category, level) {
+      const subjects = document.querySelectorAll(`#${level}-container .subject-card, #${level}-container .subject-item`);
+      
+      subjects.forEach(subject => {
+        const subjectCategory = subject.getAttribute('data-category');
+        
+        if (category === 'all' || subjectCategory === category) {
+          subject.style.display = subject.classList.contains('subject-item') ? 'flex' : 'block';
+        } else {
+          subject.style.display = 'none';
+        }
+      });
+    }
+
+    // Search subjects
+    function searchSubjects() {
+      const searchTerm = document.getElementById('subjectSearch').value.toLowerCase();
+      const subjects = document.querySelectorAll('.subject-card, .subject-item');
+      
+      subjects.forEach(subject => {
+        const name = subject.querySelector('.subject-name, .subject-item-name').textContent.toLowerCase();
+        const desc = subject.querySelector('.subject-desc, .subject-item-desc')?.textContent.toLowerCase() || '';
+        
+        if (name.includes(searchTerm) || desc.includes(searchTerm)) {
+          subject.style.display = subject.classList.contains('subject-item') ? 'flex' : 'block';
+        } else {
+          subject.style.display = 'none';
+        }
+      });
+    }
+
+    // Show all subjects for a level
+    function showAllSubjects(level) {
+      const container = document.getElementById(`${level}-container`);
+      const grid = container.querySelector('.subject-grid');
+      const list = container.querySelector('.subject-list');
+      
+      // In a real implementation, you would fetch all subjects from an API or data source
+      // For now, we'll just show an alert
+      alert(`Loading all subjects for ${level} level...`);
+    }
+
+    // Initialize list views
+    function initListView() {
+      document.querySelectorAll('.subject-grid').forEach(grid => {
+        const list = document.createElement('div');
+        list.className = 'subject-list';
+        
+        grid.querySelectorAll('.subject-card').forEach(card => {
+          const listItem = document.createElement('div');
+          listItem.className = 'subject-item';
+          listItem.onclick = card.onclick;
+          listItem.setAttribute('data-category', card.getAttribute('data-category'));
+          
+          listItem.innerHTML = `
+            <div class="subject-item-icon">${card.querySelector('.subject-icon').innerHTML}</div>
+            <div class="subject-item-name">${card.querySelector('.subject-name').textContent}</div>
+            <div class="subject-item-desc">${card.querySelector('.subject-desc').textContent}</div>
+          `;
+          
+          list.appendChild(listItem);
+        });
+        
+        grid.parentNode.insertBefore(list, grid.nextSibling);
+      });
+    }
+
     // Initialize the page
     window.onload = function() {
       // Check for saved dark mode preference
@@ -942,6 +1378,37 @@
             if (!trialActive) showTrialModal();
           };
         }
+      });
+      
+      // Initialize new features
+      initListView();
+      
+      // Set up search
+      document.getElementById('subjectSearch').addEventListener('input', searchSubjects);
+      
+      // Set up view toggle
+      document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', () => toggleView(btn.dataset.view));
+      });
+      
+      // Set up category tabs
+      document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+          const container = this.closest('.subject-container');
+          const level = container.id.replace('-container', '');
+          
+          // Update active tab
+          this.parentNode.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Filter subjects
+          filterSubjects(this.dataset.category, level);
+        });
+      });
+      
+      // Collapse all levels by default
+      document.querySelectorAll('.subject-container').forEach(container => {
+        container.classList.add('collapsed');
       });
     };
   </script>
