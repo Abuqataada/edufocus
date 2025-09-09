@@ -177,13 +177,42 @@
       border-radius: 20px;
     }
 
+    .category-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .category-tab {
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      border: none;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 1rem;
+    }
+
+    body.dark .category-tab {
+      background: rgba(67, 97, 238, 0.2);
+    }
+
+    .category-tab.active {
+      background: var(--primary);
+      color: white;
+    }
+
     .curriculum-grid {
       display: grid;
       gap: 25px;
       grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     }
 
-    .curriculum-level {
+    .subject-category {
       background: var(--card-light);
       border-radius: var(--radius);
       padding: 30px;
@@ -194,17 +223,17 @@
       border: 1px solid rgba(0, 0, 0, 0.05);
     }
 
-    body.dark .curriculum-level {
+    body.dark .subject-category {
       background: var(--card-dark);
       border-color: rgba(255, 255, 255, 0.05);
     }
 
-    .curriculum-level:hover {
+    .subject-category:hover {
       transform: translateY(-5px);
       box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
     }
 
-    .curriculum-level::before {
+    .subject-category::before {
       content: '';
       position: absolute;
       top: 0;
@@ -215,11 +244,11 @@
       transition: var(--transition);
     }
 
-    .curriculum-level:hover::before {
+    .subject-category:hover::before {
       height: 6px;
     }
 
-    .curriculum-level h2 {
+    .subject-category h2 {
       font-size: 1.5rem;
       font-weight: 600;
       color: var(--primary);
@@ -420,8 +449,18 @@
         grid-template-columns: 1fr;
       }
       
-      .curriculum-level {
+      .subject-category {
         padding: 25px;
+      }
+
+      .category-tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .category-tab {
+        width: 100%;
+        text-align: center;
       }
     }
   </style>
@@ -434,11 +473,20 @@
   <div class="premium-container">
     <div class="premium-header">
       <h1><i class="fas fa-crown"></i> Premium Curriculum Portal</h1>
-      <p>Access structured learning plans, weekly goals, and comprehensive curriculum guides designed by education experts</p>
+      <p>Access structured learning plans, weekly goals, and comprehensive curriculum guides organized by subject categories</p>
     </div>
 
     <div class="trial-banner" id="trialBanner">
       <!-- Trial status will be shown here -->
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="category-tabs" id="categoryTabs">
+      <button class="category-tab active" data-category="all">All Subjects</button>
+      <button class="category-tab" data-category="core">Core Subjects</button>
+      <button class="category-tab" data-category="stem">STEM</button>
+      <button class="category-tab" data-category="humanities">Humanities</button>
+      <button class="category-tab" data-category="arts">Arts & Creativity</button>
     </div>
     
     <div class="curriculum-grid" id="curriculumGrid">
@@ -453,6 +501,109 @@
   </div>
 
   <script>
+    // Subject categories data
+    const subjectCategories = {
+      'core': {
+        name: 'Core Subjects',
+        icon: 'fas fa-graduation-cap',
+        subjects: [
+          {
+            name: 'Mathematics',
+            icon: 'fas fa-calculator',
+            description: 'Comprehensive math curriculum from basics to advanced concepts'
+          },
+          {
+            name: 'Language Arts',
+            icon: 'fas fa-language',
+            description: 'Reading, writing, grammar, and communication skills'
+          },
+          {
+            name: 'Science',
+            icon: 'fas fa-flask',
+            description: 'Biology, chemistry, physics, and earth sciences'
+          }
+        ]
+      },
+      'stem': {
+        name: 'STEM',
+        icon: 'fas fa-microscope',
+        subjects: [
+          {
+            name: 'Advanced Mathematics',
+            icon: 'fas fa-square-root-alt',
+            description: 'Algebra, calculus, statistics, and advanced problem-solving'
+          },
+          {
+            name: 'Computer Science',
+            icon: 'fas fa-laptop-code',
+            description: 'Coding, algorithms, and computational thinking'
+          },
+          {
+            name: 'Engineering',
+            icon: 'fas fa-cogs',
+            description: 'Design thinking, mechanics, and engineering principles'
+          },
+          {
+            name: 'Technology',
+            icon: 'fas fa-microchip',
+            description: 'Digital literacy, applications, and emerging technologies'
+          }
+        ]
+      },
+      'humanities': {
+        name: 'Humanities',
+        icon: 'fas fa-globe',
+        subjects: [
+          {
+            name: 'History',
+            icon: 'fas fa-monument',
+            description: 'World events, civilizations, and historical analysis'
+          },
+          {
+            name: 'Geography',
+            icon: 'fas fa-map-marked',
+            description: 'Physical and human geography, cultures, and environments'
+          },
+          {
+            name: 'Civics',
+            icon: 'fas fa-landmark',
+            description: 'Government, citizenship, and social structures'
+          },
+          {
+            name: 'Economics',
+            icon: 'fas fa-chart-line',
+            description: 'Microeconomics, macroeconomics, and financial literacy'
+          }
+        ]
+      },
+      'arts': {
+        name: 'Arts & Creativity',
+        icon: 'fas fa-palette',
+        subjects: [
+          {
+            name: 'Visual Arts',
+            icon: 'fas fa-paint-brush',
+            description: 'Drawing, painting, sculpture, and digital arts'
+          },
+          {
+            name: 'Music',
+            icon: 'fas fa-music',
+            description: 'Theory, composition, instruments, and music appreciation'
+          },
+          {
+            name: 'Drama',
+            icon: 'fas fa-theater-masks',
+            description: 'Acting, performance, and theater production'
+          },
+          {
+            name: 'Creative Writing',
+            icon: 'fas fa-pen-fancy',
+            description: 'Storytelling, poetry, and expressive writing'
+          }
+        ]
+      }
+    };
+
     // Initialize premium page
     function initPremiumPage() {
       checkTrialStatus();
@@ -465,6 +616,18 @@
         icon.classList.remove('fa-moon');
         icon.classList.add('fa-sun');
       }
+
+      // Set up category tabs
+      document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+          // Update active tab
+          document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Reload content with filter
+          loadCurriculumContent(this.dataset.category);
+        });
+      });
     }
 
     function checkTrialStatus() {
@@ -512,7 +675,7 @@
       }
     }
 
-    function loadCurriculumContent() {
+    function loadCurriculumContent(category = 'all') {
       const grid = document.getElementById('curriculumGrid');
       const hasAccess = checkTrialStatus();
       
@@ -530,88 +693,34 @@
         return;
       }
       
-      // Load curriculum content
-      grid.innerHTML = `
-        <div class="curriculum-level">
-          <h2><i class="fas fa-baby"></i> Early Years (Ages 3-5)</h2>
-          <div class="curriculum-item">
-            <h3><i class="fas fa-paint-brush"></i> Creative Arts</h3>
-            <p>Developmentally appropriate art activities and sensory play with weekly lesson plans</p>
-          </div>
-          <div class="curriculum-item">
-            <h3><i class="fas fa-book"></i> Early Literacy</h3>
-            <p>Phonemic awareness, storytelling, and pre-writing skills with daily exercises</p>
-          </div>
-          <div class="curriculum-item">
-            <h3><i class="fas fa-shapes"></i> Math Foundations</h3>
-            <p>Counting, shapes, patterns, and sorting activities with progress tracking</p>
-          </div>
-          <div class="curriculum-item">
-            <h3><i class="fas fa-music"></i> Music & Movement</h3>
-            <p>Rhythm activities, song learning, and physical coordination development</p>
-          </div>
-        </div>
+      // Filter categories if needed
+      const categoriesToShow = category === 'all' 
+        ? Object.keys(subjectCategories) 
+        : [category];
+      
+      let contentHTML = '';
+      
+      categoriesToShow.forEach(catKey => {
+        const categoryData = subjectCategories[catKey];
         
-        <div class="curriculum-level">
-          <h2><i class="fas fa-child"></i> Primary (Ages 6-11)</h2>
-          <div class="curriculum-item">
-            <h3><i class="fas fa-language"></i> Language Arts</h3>
-            <p>Reading comprehension, writing skills, and grammar with weekly challenges</p>
-          </div>
-          <div class="curriculum-item">
-            <h3><i class="fas fa-calculator"></i> Mathematics</h3>
-            <p>Number operations, fractions, and problem-solving with interactive tools</p>
-          </div>
-          <div class="curriculum-item">
-            <h3><i class="fas fa-flask"></i> Science</h3>
-            <p>Hands-on experiments and scientific inquiry with video demonstrations</p>
-          </div>
-          <div class="curriculum-item">
-            <h3><i class="fas fa-globe"></i> Social Studies</h3>
-            <p>Community awareness, geography, and historical events exploration</p>
-          </div>
-        </div>
+        contentHTML += `
+          <div class="subject-category" data-category="${catKey}">
+            <h2><i class="${categoryData.icon}"></i> ${categoryData.name}</h2>
+        `;
         
-        <div class="curriculum-level">
-          <h2><i class="fas fa-user-graduate"></i> Secondary (Ages 12-18)</h2>
-          <div class="curriculum-item">
-            <h3><i class="fas fa-atom"></i> Advanced STEM</h3>
-            <p>Algebra, geometry, physics, and chemistry with real-world applications</p>
-          </div>
-          <div class="curriculum-item">
-            <h3><i class="fas fa-globe-americas"></i> Humanities</h3>
-            <p>Literature analysis, history, and social studies with critical thinking exercises</p>
-          </div>
-          <div class="curriculum-item">
-            <h3><i class="fas fa-graduation-cap"></i> College Prep</h3>
-            <p>Test preparation, academic writing, and research skills development</p>
-          </div>
-          <div class="curriculum-item">
-            <h3><i class="fas fa-laptop-code"></i> Technology</h3>
-            <p>Coding fundamentals, digital literacy, and technology applications</p>
-          </div>
-        </div>
+        categoryData.subjects.forEach(subject => {
+          contentHTML += `
+            <div class="curriculum-item">
+              <h3><i class="${subject.icon}"></i> ${subject.name}</h3>
+              <p>${subject.description}</p>
+            </div>
+          `;
+        });
         
-        <div class="curriculum-level">
-          <h2><i class="fas fa-chart-line"></i> Learning Tools</h2>
-          <div class="curriculum-item">
-            <h3><i class="fas fa-clipboard-check"></i> Assessment Tools</h3>
-            <p>Customizable rubrics, quizzes, and evaluation forms with analytics</p>
-          </div>
-          <div class="curriculum-item">
-            <h3><i class="fas fa-chart-pie"></i> Analytics Dashboard</h3>
-            <p>Visual progress reports, skill mastery tracking, and learning insights</p>
-          </div>
-          <div class="curriculum-item">
-            <h3><i class="fas fa-calendar-alt"></i> Lesson Planning</h3>
-            <p>Customizable templates, scheduling tools, and resource organization</p>
-          </div>
-          <div class="curriculum-item">
-            <h3><i class="fas fa-trophy"></i> Achievement System</h3>
-            <p>Badges, certificates, and milestones to celebrate learning progress</p>
-          </div>
-        </div>
-      `;
+        contentHTML += `</div>`;
+      });
+      
+      grid.innerHTML = contentHTML;
     }
 
     function startFreeTrial() {

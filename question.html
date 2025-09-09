@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Learning Assistant</title>
+  <title>AI Learning Assistant - Subject Tutor</title>
   <script src="https://js.puter.com/v2/"></script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
@@ -461,7 +460,7 @@
         <div class="subject-icon" id="subjectIcon">📚</div>
         <div class="subject-info">
           <h2 id="subjectTitle">Subject</h2>
-          <p id="levelInfo">Level</p>
+          <p>AI Tutor Session</p>
         </div>
       </div>
     </div>
@@ -515,7 +514,12 @@ const subjectIcons = {
   'chemistry': '🧪',
   'biology': '🧬',
   'economics': '💹',
-  'literature': '📚'
+  'literature': '📚',
+  'coding': '💻',
+  'music': '🎵',
+  'drama': '🎭',
+  'creative': '✏️',
+  'civics': '🏛️'
 };
 
 // Subject descriptions for relevance checking
@@ -532,23 +536,20 @@ const subjectDescriptions = {
   'chemistry': 'elements, compounds, reactions, atoms, molecules, periodic table',
   'biology': 'cells, organisms, ecosystems, genetics, human body, plants, animals',
   'economics': 'supply and demand, markets, finance, microeconomics, macroeconomics',
-  'literature': 'books, novels, poems, literary analysis, authors, themes, characters'
-};
-
-// Level names for display
-const levelNames = {
-  'early': 'Early Years',
-  'primary': 'Primary School',
-  'junior': 'Junior Secondary',
-  'senior': 'Senior Secondary'
+  'literature': 'books, novels, poems, literary analysis, authors, themes, characters',
+  'coding': 'programming, algorithms, code, computational thinking, software development',
+  'music': 'instruments, notes, rhythm, composition, music theory, singing',
+  'drama': 'acting, theater, performance, plays, scripts, improvisation',
+  'creative': 'creative writing, storytelling, poetry, fiction, narrative',
+  'civics': 'government, citizenship, law, rights, responsibilities, democracy'
 };
 
 // Subject names for display
 const subjectNames = {
-  'literacy': 'Early Literacy',
+  'literacy': 'Literacy',
   'numeracy': 'Numeracy',
   'science': 'Science',
-  'arts': 'Creative Arts',
+  'arts': 'Visual Arts',
   'math': 'Mathematics',
   'english': 'English',
   'history': 'History',
@@ -557,7 +558,12 @@ const subjectNames = {
   'chemistry': 'Chemistry',
   'biology': 'Biology',
   'economics': 'Economics',
-  'literature': 'Literature'
+  'literature': 'Literature',
+  'coding': 'Coding',
+  'music': 'Music',
+  'drama': 'Drama',
+  'creative': 'Creative Writing',
+  'civics': 'Civics'
 };
 
 // DOM Elements
@@ -565,12 +571,10 @@ const chatContainer = document.getElementById('chatContainer');
 const learningInput = document.getElementById('learningInput');
 const subjectIcon = document.getElementById('subjectIcon');
 const subjectTitle = document.getElementById('subjectTitle');
-const levelInfo = document.getElementById('levelInfo');
 const imageOutput = document.getElementById('imageOutput');
 const actionsDropup = document.getElementById('actionsDropup');
 
 // State variables
-let currentLevel = '';
 let currentSubject = '';
 let chatHistory = [];
 
@@ -581,13 +585,11 @@ function initPage() {
     document.body.classList.add('dark');
   }
   
-  // Get level and subject from localStorage
-  currentLevel = localStorage.getItem('learningLevel') || 'early';
-  currentSubject = localStorage.getItem('learningSubject') || 'literacy';
+  // Get subject from localStorage
+  currentSubject = localStorage.getItem('learningSubject') || 'math';
   
   // Update UI
   subjectTitle.textContent = subjectNames[currentSubject] || 'Subject';
-  levelInfo.textContent = levelNames[currentLevel] || 'Level';
   subjectIcon.textContent = subjectIcons[currentSubject] || '📚';
   
   // Load chat history
@@ -595,7 +597,7 @@ function initPage() {
   
   // Add welcome message if chat is empty
   if (chatHistory.length === 0) {
-    addBotMessage(`Hello! I'm your ${subjectNames[currentSubject]} tutor for ${levelNames[currentLevel]}. How can I help you today?`);
+    addBotMessage(`Hello! I'm your ${subjectNames[currentSubject]} tutor. How can I help you today?`);
   }
 }
 
@@ -619,7 +621,7 @@ document.addEventListener('click', (e) => {
 
 // Load chat history from localStorage
 function loadChatHistory() {
-  const savedChat = localStorage.getItem(`chatHistory_${currentSubject}_${currentLevel}`);
+  const savedChat = localStorage.getItem(`chatHistory_${currentSubject}`);
   if (savedChat) {
     chatHistory = JSON.parse(savedChat);
     renderChatHistory();
@@ -628,7 +630,7 @@ function loadChatHistory() {
 
 // Save chat history to localStorage
 function saveChatHistory() {
-  localStorage.setItem(`chatHistory_${currentSubject}_${currentLevel}`, JSON.stringify(chatHistory));
+  localStorage.setItem(`chatHistory_${currentSubject}`, JSON.stringify(chatHistory));
 }
 
 // Render chat history to the UI
@@ -751,31 +753,30 @@ async function sendMessage() {
   
   try {
     let systemPrompt = `
-    You are a ${levelNames[currentLevel]} ${subjectNames[currentSubject]} tutor. 
+    You are a ${subjectNames[currentSubject]} tutor. 
     Before answering any question, you MUST follow these rules:
     
     1. FIRST analyze if the question is relevant to ${subjectNames[currentSubject]} (${subjectDescriptions[currentSubject]}).
     2. IF the question is relevant:
        - For STEM subjects, use the I.S.E.E method (Identify, Setup, Execute, Evaluate)
        - For humanities, provide structured analysis
-       - For early years, use simple language with emojis
-       - Always provide age-appropriate explanations
+       - For arts, focus on creative expression and techniques
+       - Always provide clear, educational explanations
     3. IF the question is NOT relevant:
        - Politely explain why it's not relevant to ${subjectNames[currentSubject]}
        - Suggest the most appropriate subject(s) for this question
        - Do NOT answer the question itself
     
     Current subject: ${subjectNames[currentSubject]} (${subjectDescriptions[currentSubject]})
-    Current level: ${levelNames[currentLevel]}
     `;
     
     // Add subject-specific guidance
-    if (currentSubject === 'math' || currentSubject === 'numeracy') {
-      systemPrompt += `\nMath-specific: Show step-by-step working. Use LaTeX for math: \\(x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}\\)`;
-    } else if (['physics','chemistry','biology','science'].includes(currentSubject)) {
-      systemPrompt += `\nScience-specific: Explain concepts with real-world examples. Use proper terminology.`;
-    } else if (['english','literature','literacy'].includes(currentSubject)) {
+    if (['math', 'numeracy', 'physics', 'chemistry', 'biology', 'science', 'coding'].includes(currentSubject)) {
+      systemPrompt += `\nSTEM-specific: Show step-by-step working. Use LaTeX for math: \\(x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}\\)`;
+    } else if (['english','literature','literacy', 'creative'].includes(currentSubject)) {
       systemPrompt += `\nLanguage-specific: Provide clear explanations of grammar and literary elements.`;
+    } else if (['arts', 'music', 'drama'].includes(currentSubject)) {
+      systemPrompt += `\nArts-specific: Focus on creative techniques, expression, and appreciation.`;
     }
 
     const response = await puter.ai.chat([
@@ -804,13 +805,6 @@ async function generateImage() {
     return;
   }
 
-  // Disable button during generation
-  const imageBtn = document.getElementById('imageBtn');
-  if (imageBtn) {
-    imageBtn.disabled = true;
-    imageBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-  }
-  
   // Add user message to chat
   addUserMessage(`[Image Request]: ${prompt}`);
   learningInput.value = '';
@@ -835,17 +829,11 @@ async function generateImage() {
       return;
     }
     
-    let enhancedPrompt = `Educational ${currentSubject} diagram for ${levelNames[currentLevel]}: ${prompt}`;
+    let enhancedPrompt = `Educational ${currentSubject} diagram: ${prompt}`;
     const image = await puter.ai.images.generate(enhancedPrompt);
     addImageMessage(image.url);
   } catch (err) {
     addBotMessage("❌ Error generating image: " + err.message);
-  } finally {
-    const imageBtn = document.getElementById('imageBtn');
-    if (imageBtn) {
-      imageBtn.disabled = false;
-      imageBtn.innerHTML = '<i class="fas fa-image"></i>';
-    }
   }
 }
 
@@ -854,9 +842,9 @@ function exportPDF() {
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF();
   
-  // Add header with subject and level
+  // Add header with subject
   pdf.setFontSize(16);
-  pdf.text(`${subjectNames[currentSubject]} (${levelNames[currentLevel]})`, 10, 10);
+  pdf.text(`${subjectNames[currentSubject]} Tutor Session`, 10, 10);
   pdf.setFontSize(12);
   
   let yPosition = 20;
@@ -896,7 +884,7 @@ function clearChat() {
     chatHistory = [];
     saveChatHistory();
     chatContainer.innerHTML = '';
-    addBotMessage(`Hello! I'm your ${subjectNames[currentSubject]} tutor for ${levelNames[currentLevel]}. How can I help you today?`);
+    addBotMessage(`Hello! I'm your ${subjectNames[currentSubject]} tutor. How can I help you today?`);
   }
 }
 
