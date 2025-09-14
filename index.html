@@ -329,18 +329,6 @@
       }
     }
 
-    .premium-badge {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      font-weight: 600;
-    }
-
     .mode-toggle {
       position: fixed;
       top: 20px;
@@ -365,124 +353,6 @@
       transform: scale(1.1);
     }
 
-    /* Trial Banner */
-    .trial-banner {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      padding: 15px;
-      text-align: center;
-      margin-bottom: 30px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .trial-banner.trial-active {
-      background: linear-gradient(135deg, var(--success), #2a9d8f);
-      animation: pulse 2s infinite;
-    }
-
-    .trial-banner.trial-expired {
-      background: linear-gradient(135deg, var(--warning), var(--error));
-    }
-
-    .trial-banner::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        to bottom right,
-        rgba(255,255,255,0.3) 0%,
-        rgba(255,255,255,0) 60%
-      );
-      transform: rotate(30deg);
-      animation: shine 3s infinite;
-    }
-
-    .trial-banner h3 {
-      font-size: 1.3rem;
-      margin-bottom: 8px;
-      position: relative;
-    }
-
-    .trial-banner p {
-      font-size: 0.9rem;
-      opacity: 0.9;
-      position: relative;
-    }
-
-    .trial-banner .timer {
-      font-weight: bold;
-      font-size: 1.1rem;
-      margin-top: 10px;
-      display: inline-block;
-      padding: 5px 15px;
-      background: rgba(0,0,0,0.2);
-      border-radius: 20px;
-    }
-
-    /* Premium Section */
-    .premium-section {
-      margin: 40px 0;
-      animation: fadeIn 1s ease-out;
-    }
-
-    .premium-card {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      padding: 30px;
-      border-radius: var(--radius);
-      text-align: center;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
-
-    body.dark .premium-card {
-      background: linear-gradient(135deg, var(--primary-dark), #2a0c7a);
-    }
-
-    .premium-icon {
-      font-size: 3rem;
-      margin-bottom: 20px;
-      color: white;
-    }
-
-    .premium-title {
-      font-size: 1.8rem;
-      margin-bottom: 15px;
-    }
-
-    .premium-description {
-      font-size: 1rem;
-      margin-bottom: 25px;
-      opacity: 0.9;
-      line-height: 1.6;
-    }
-
-    .btn-premium {
-      background: white;
-      color: var(--primary-dark);
-      border: none;
-      padding: 12px 25px;
-      border-radius: var(--radius);
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .btn-premium:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    }
-
     /* Animations */
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -497,18 +367,6 @@
       to { 
         opacity: 1;
         transform: translateY(0);
-      }
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.02); }
-      100% { transform: scale(1); }
-    }
-
-    @keyframes shine {
-      to {
-        transform: translateX(100%) rotate(30deg);
       }
     }
 
@@ -533,10 +391,6 @@
       .subject-card {
         padding: 20px;
       }
-
-      .premium-title {
-        font-size: 1.5rem;
-      }
     }
 
     @media (max-width: 480px) {
@@ -546,10 +400,6 @@
       
       .subject-grid {
         grid-template-columns: 1fr;
-      }
-      
-      .premium-card {
-        padding: 20px;
       }
       
       .controls {
@@ -577,13 +427,6 @@
       <h1><i class="fas fa-graduation-cap"></i> AI Learning Assistant</h1>
       <h2>Select a subject to begin your learning journey</h2>
     </header>
-
-    <!-- Trial Banner - Dynamically updated by JavaScript -->
-    <div class="trial-banner" id="trialBanner">
-      <h3></h3>
-      <p></p>
-      <!-- <button class="btn-primary" onclick="startFreeTrial()" style="margin-top: 10px; padding: 8px 20px; font-size: 0.9rem;">Start Free Trial</button>
- --> </div>
    
     <!-- New Controls Section -->
     <div class="controls">
@@ -614,23 +457,6 @@
     <!-- Subjects List (hidden by default) -->
     <div class="subject-list" id="subjectList">
       <!-- Subjects list will be loaded by JavaScript -->
-    </div>
-    
-    <!-- Premium Section -->
-    <div class="premium-section">
-      <div class="premium-card">
-        <div class="premium-icon">
-          <i class="fas fa-crown"></i>
-        </div>
-        <h3 class="premium-title">Premium Curriculum Portal</h3>
-        <p class="premium-description">
-          Access structured learning plans, weekly goals, and comprehensive curriculum guides 
-          designed by education experts.
-        </p>
-        <button class="btn-premium" onclick="window.location.href='premium.html'">
-             <i class="fas fa-arrow-right"></i> Explore Premium Features
-        </button>
-      </div>
     </div>
   </div>
 
@@ -680,103 +506,563 @@
         description: 'Storytelling, poetry and creative expression' }
     ];
 
-    // Trial system variables
-    let trialEndDate = localStorage.getItem('trialEndDate');
-    let trialActive = false;
+    // Subject selection
+    function selectSubject(subjectId) {
+      // Store selection in localStorage
+      localStorage.setItem('learningSubject', subjectId);
+      
+      // Redirect to question page
+      window.location.href = 'question.html';
+    }
 
-    // Check trial status on page load
-    function checkTrialStatus() {
-      if (trialEndDate) {
-        const now = new Date();
-        const endDate = new Date(trialEndDate);
+    // Load subjects into the grid and list
+    function loadSubjects() {
+      const subjectGrid = document.getElementById('subjectGrid');
+      const subjectList = document.getElementById('subjectList');
+      
+      // Clear existing content
+      subjectGrid.innerHTML = '';
+      subjectList.innerHTML = '';
+      
+      // Get active category
+      const activeCategory = document.querySelector('.category-tab.active')?.dataset.category || 'all';
+      
+      // Filter subjects by category if needed
+      const filteredSubjects = activeCategory === 'all' 
+        ? subjects 
+        : subjects.filter(subject => subject.category === activeCategory);
+      
+      // Add subjects to grid
+      filteredSubjects.forEach((subject, index) => {
+        const card = document.createElement('div');
+        card.className = 'subject-card';
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.onclick = () => selectSubject(subject.id);
+        card.setAttribute('data-category', subject.category);
         
-        if (now < endDate) {
-          // Trial is active
-          trialActive = true;
-          updateTrialUI(true);
-          startTrialTimer();
-        } else {
-          // Trial has expired
-          trialActive = false;
-          localStorage.removeItem('trialEndDate');
-          updateTrialUI(false);
-        }
-      } else {
-        // No trial exists
-        trialActive = false;
-        updateTrialUI(false);
+        card.innerHTML = `
+          <div class="subject-icon"><i class="${subject.icon}"></i></div>
+          <div class="subject-name">${subject.name}</div>
+          <div class="subject-desc">${subject.description}</div>
+        `;
+        
+        subjectGrid.appendChild(card);
+      });
+      
+      // Add subjects to list
+      filteredSubjects.forEach((subject, index) => {
+        const item = document.createElement('div');
+        item.className = 'subject-item';
+        item.style.animationDelay = `${index * 0.1}s`;
+        item.onclick = () => selectSubject(subject.id);
+        item.setAttribute('data-category', subject.category);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Learning Assistant - Subjects</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a0ca3;
+      --primary-light: #e0e8ff;
+      --secondary: #f72585;
+      --bg-light: #f8f9fa;
+      --bg-dark: #121212;
+      --text-light: #333;
+      --text-dark: #f8f9fa;
+      --card-light: #ffffff;
+      --card-dark: #1e1e1e;
+      --success: #4cc9f0;
+      --warning: #f8961e;
+      --error: #ef233c;
+      --radius: 16px;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-light);
+      min-height: 100vh;
+      transition: var(--transition);
+      line-height: 1.6;
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 0;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 10px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--text-light);
+      opacity: 0.8;
+      margin-bottom: 30px;
+    }
+
+    body.dark h2 {
+      color: var(--text-dark);
+    }
+
+    /* Controls Styles */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 250px;
+      max-width: 400px;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary);
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 20px 12px 45px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(0,0,0,0.1);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    body.dark .search-box input {
+      background: var(--card-dark);
+      border-color: rgba(255,255,255,0.1);
+      color: var(--text-dark);
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+    }
+
+    .view-toggle {
+      display: flex;
+      background: var(--card-light);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    body.dark .view-toggle {
+      background: var(--card-dark);
+    }
+
+    .view-btn {
+      padding: 10px 15px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      transition: var(--transition);
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    body.dark .view-btn {
+      color: var(--text-dark);
+    }
+
+    .view-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .view-btn i {
+      margin-right: 5px;
+    }
+
+    /* Category Tabs */
+    .category-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .category-tab {
+      padding: 8px 15px;
+      border-radius: 20px;
+      border: none;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9rem;
+    }
+
+    body.dark .category-tab {
+      background: rgba(67, 97, 238, 0.2);
+    }
+
+    .category-tab.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Subject Cards */
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .subject-card {
+      background: var(--card-light);
+      padding: 25px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      animation: slideUp 0.6s ease-out forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    body.dark .subject-card {
+      background: var(--card-dark);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .subject-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+    }
+
+    .subject-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: var(--transition);
+    }
+
+    .subject-card:hover::before {
+      height: 6px;
+    }
+
+    .subject-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: var(--primary);
+      transition: var(--transition);
+    }
+
+    .subject-card:hover .subject-icon {
+      transform: scale(1.1);
+    }
+
+    .subject-name {
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+    }
+
+    .subject-desc {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      opacity: 0.8;
+      line-height: 1.5;
+    }
+
+    body.dark .subject-desc {
+      color: var(--text-dark);
+    }
+
+    /* List View Styles */
+    .subject-list {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    .subject-list.active {
+      display: flex;
+    }
+
+    .subject-item {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background: var(--card-light);
+      border-radius: var(--radius);
+      transition: var(--transition);
+      cursor: pointer;
+      animation: slideUp 0.6s ease-out forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    body.dark .subject-item {
+      background: var(--card-dark);
+    }
+
+    .subject-item:hover {
+      transform: translateX(5px);
+      box-shadow: var(--shadow);
+    }
+
+    .subject-item-icon {
+      font-size: 1.5rem;
+      margin-right: 15px;
+      color: var(--primary);
+      width: 40px;
+      text-align: center;
+    }
+
+    .subject-item-name {
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .subject-item-desc {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .subject-item-desc {
+        display: block;
+        margin-left: 20px;
+        flex: 2;
       }
     }
 
-    // Start free trial
-    function startFreeTrial() {
-      const now = new Date();
-      const endDate = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000); // 14 days from now
-      
-      localStorage.setItem('trialEndDate', endDate.toISOString());
-      trialEndDate = endDate.toISOString();
-      trialActive = true;
-      
-      updateTrialUI(true);
-      startTrialTimer();
-      
-      // Show success message
-      alert('🎉 Your 2-week free trial has started! Enjoy full access to premium curriculum features.');
+    .mode-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+      z-index: 100;
     }
 
-    // Update UI based on trial status
-    function updateTrialUI(isActive) {
-      const trialBanner = document.getElementById('trialBanner');
-      
-     // if (isActive) {
-        // Trial is active - show timer
-    //    trialBanner.className = 'trial-banner trial-active';
-     //   trialBanner.innerHTML = `
-    //      <h3><i class="fas fa-unlock-alt"></i> Trial Active</h3>
-     //     <p>You have full access to premium curriculum features</p>
-   //       <div class="timer" id="trialTimer">14 days 00:00:00 remaining</div>
-  //      `;
-  //    } else {
-        // Trial not active
-   //     trialBanner.className = 'trial-banner';
-    //    trialBanner.innerHTML = `
-    //      <h3><i class="fas fa-gift"></i> Start Your 2-Week Free Trial</h3>
-  //        <p>Unlock premium curriculum and structured learning plans</p>
- //         <button class="btn-primary" onclick="startFreeTrial()" style="margin-top: 10px; padding: 8px 20px; font-size: 0.9rem;">Start Free Trial</button>
-  //      `;
-//      }
-  //  }
+    .mode-toggle:hover {
+      transform: scale(1.1);
+    }
 
-    // Timer for trial countdown
-    function startTrialTimer() {
-      if (!trialEndDate) return;
-      
-      function updateTimer() {
-        const now = new Date();
-        const endDate = new Date(trialEndDate);
-        const diff = endDate - now;
-        
-        if (diff <= 0) {
-          // Trial expired
-          document.getElementById('trialTimer').textContent = 'Trial expired';
-          localStorage.removeItem('trialEndDate');
-          trialActive = false;
-          updateTrialUI(false);
-          return;
-        }
-        
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        
-        document.getElementById('trialTimer').textContent = 
-          `${days} days ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} remaining`;
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { 
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
       }
       
-      updateTimer();
-      setInterval(updateTimer, 1000);
+      h2 {
+        font-size: 1rem;
+      }
+      
+      .container {
+        padding: 15px;
+      }
+      
+      .subject-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+      
+      .subject-card {
+        padding: 20px;
+      }
     }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .subject-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .controls {
+        flex-direction: column;
+      }
+      
+      .search-box {
+        max-width: 100%;
+      }
+      
+      .view-toggle {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="mode-toggle" onclick="toggleDarkMode()">
+    <i class="fas fa-moon"></i>
+  </button>
+  
+  <div class="container">
+    <header>
+      <h1><i class="fas fa-graduation-cap"></i> AI Learning Assistant</h1>
+      <h2>Select a subject to begin your learning journey</h2>
+    </header>
+   
+    <!-- New Controls Section -->
+    <div class="controls">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="subjectSearch" placeholder="Search subjects...">
+      </div>
+      <div class="view-toggle">
+        <button class="view-btn active" data-view="cards"><i class="fas fa-th"></i> Cards</button>
+        <button class="view-btn" data-view="list"><i class="fas fa-list"></i> List</button>
+      </div>
+    </div>
+    
+    <!-- Category Tabs -->
+    <div class="category-tabs">
+      <button class="category-tab active" data-category="all">All Subjects</button>
+      <button class="category-tab" data-category="core">Core Subjects</button>
+      <button class="category-tab" data-category="stem">STEM</button>
+      <button class="category-tab" data-category="humanities">Humanities</button>
+      <button class="category-tab" data-category="arts">Arts & Creativity</button>
+    </div>
+    
+    <!-- Subjects Grid -->
+    <div class="subject-grid" id="subjectGrid">
+      <!-- Subjects will be loaded by JavaScript -->
+    </div>
+    
+    <!-- Subjects List (hidden by default) -->
+    <div class="subject-list" id="subjectList">
+      <!-- Subjects list will be loaded by JavaScript -->
+    </div>
+  </div>
+
+  <script>
+    // Subject data - organized by category instead of level
+    const subjects = [
+      // Core Subjects
+      { id: 'literacy', name: 'Literacy', icon: 'fas fa-book-open', category: 'core', 
+        description: 'Reading, writing, phonics and storytelling fundamentals' },
+      { id: 'numeracy', name: 'Numeracy', icon: 'fas fa-calculator', category: 'core', 
+        description: 'Counting, shapes, patterns and basic math concepts' },
+      { id: 'math', name: 'Mathematics', icon: 'fas fa-square-root-alt', category: 'core', 
+        description: 'Arithmetic, geometry, algebra and problem solving' },
+      { id: 'english', name: 'English', icon: 'fas fa-language', category: 'core', 
+        description: 'Reading, writing, grammar and literature' },
+      
+      // STEM Subjects
+      { id: 'science', name: 'Science', icon: 'fas fa-flask', category: 'stem', 
+        description: 'Biology, chemistry, physics and earth science' },
+      { id: 'physics', name: 'Physics', icon: 'fas fa-bolt', category: 'stem', 
+        description: 'Motion, energy, forces and fundamental laws' },
+      { id: 'chemistry', name: 'Chemistry', icon: 'fas fa-vial', category: 'stem', 
+        description: 'Elements, reactions, atoms and molecules' },
+      { id: 'biology', name: 'Biology', icon: 'fas fa-dna', category: 'stem', 
+        description: 'Cells, organisms, ecosystems and genetics' },
+      { id: 'coding', name: 'Coding', icon: 'fas fa-code', category: 'stem', 
+        description: 'Programming fundamentals and computational thinking' },
+      
+      // Humanities
+      { id: 'history', name: 'History', icon: 'fas fa-landmark', category: 'humanities', 
+        description: 'World events, cultures and historical figures' },
+      { id: 'geography', name: 'Geography', icon: 'fas fa-globe', category: 'humanities', 
+        description: 'Maps, countries, and physical landscapes' },
+      { id: 'economics', name: 'Economics', icon: 'fas fa-chart-line', category: 'humanities', 
+        description: 'Micro, macro, finance and economic theory' },
+      { id: 'civics', name: 'Civics', icon: 'fas fa-university', category: 'humanities', 
+        description: 'Government, citizenship and social studies' },
+      
+      // Arts & Creativity
+      { id: 'arts', name: 'Visual Arts', icon: 'fas fa-paint-brush', category: 'arts', 
+        description: 'Drawing, painting, and artistic techniques' },
+      { id: 'music', name: 'Music', icon: 'fas fa-music', category: 'arts', 
+        description: 'Music theory, instruments and composition' },
+      { id: 'drama', name: 'Drama', icon: 'fas fa-theater-masks', category: 'arts', 
+        description: 'Acting, performance and theater arts' },
+      { id: 'creative', name: 'Creative Writing', icon: 'fas fa-pen-fancy', category: 'arts', 
+        description: 'Storytelling, poetry and creative expression' }
+    ];
 
     // Subject selection
     function selectSubject(subjectId) {
@@ -839,99 +1125,104 @@
       });
     }
 
-    // Filter subjects by category
-    function filterSubjects(category) {
-      // Update active tab
-      document.querySelectorAll('.category-tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      event.target.classList.add('active');
-      
-      // Reload subjects with new filter
-      loadSubjects();
-    }
-
-    // Search subjects
-    function searchSubjects() {
-      const searchTerm = document.getElementById('subjectSearch').value.toLowerCase();
-      const subjectElements = document.querySelectorAll('.subject-card, .subject-item');
-      
-      subjectElements.forEach(element => {
-        const name = element.querySelector('.subject-name, .subject-item-name').textContent.toLowerCase();
-        const desc = element.querySelector('.subject-desc, .subject-item-desc')?.textContent.toLowerCase() || '';
-        
-        if (name.includes(searchTerm) || desc.includes(searchTerm)) {
-          element.style.display = element.classList.contains('subject-item') ? 'flex' : 'block';
-        } else {
-          element.style.display = 'none';
-        }
-      });
-    }
-
-    // Toggle between card and list views
-    function toggleView(viewType) {
-      const grid = document.getElementById('subjectGrid');
-      const list = document.getElementById('subjectList');
-      const viewButtons = document.querySelectorAll('.view-btn');
-      
-      viewButtons.forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-      
-      if (viewType === 'list') {
-        grid.style.display = 'none';
-        list.style.display = 'flex';
-      } else {
-        grid.style.display = 'grid';
-        list.style.display = 'none';
-      }
-    }
-
-    // Dark mode toggle
+    // Toggle between dark and light mode
     function toggleDarkMode() {
-      document.body.classList.toggle('dark');
-      localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+      const body = document.body;
+      const modeToggle = document.querySelector('.mode-toggle');
+      const icon = modeToggle.querySelector('i');
       
-      const icon = document.querySelector('.mode-toggle i');
-      if (document.body.classList.contains('dark')) {
-        icon.classList.remove('fa-moon');
-        icon.classList.add('fa-sun');
+      body.classList.toggle('dark');
+      
+      if (body.classList.contains('dark')) {
+        icon.className = 'fas fa-sun';
+        localStorage.setItem('darkMode', 'enabled');
       } else {
-        icon.classList.remove('fa-sun');
-        icon.classList.add('fa-moon');
+        icon.className = 'fas fa-moon';
+        localStorage.setItem('darkMode', 'disabled');
       }
+    }
+
+    // Search functionality
+    function setupSearch() {
+      const searchInput = document.getElementById('subjectSearch');
+      
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const cards = document.querySelectorAll('.subject-card');
+        const listItems = document.querySelectorAll('.subject-item');
+        
+        cards.forEach(card => {
+          const subjectName = card.querySelector('.subject-name').textContent.toLowerCase();
+          const subjectDesc = card.querySelector('.subject-desc').textContent.toLowerCase();
+          
+          if (subjectName.includes(searchTerm) || subjectDesc.includes(searchTerm)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+        
+        listItems.forEach(item => {
+          const subjectName = item.querySelector('.subject-item-name').textContent.toLowerCase();
+          const subjectDesc = item.querySelector('.subject-item-desc').textContent.toLowerCase();
+          
+          if (subjectName.includes(searchTerm) || subjectDesc.includes(searchTerm)) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
     }
 
     // Initialize the page
-    window.onload = function() {
-      // Check for saved dark mode preference
-      if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark');
-        const icon = document.querySelector('.mode-toggle i');
-        icon.classList.remove('fa-moon');
-        icon.classList.add('fa-sun');
-      }
-      
-      // Initialize trial system
-      checkTrialStatus();
-      
+    document.addEventListener('DOMContentLoaded', function() {
       // Load subjects
       loadSubjects();
       
-      // Set up search
-      document.getElementById('subjectSearch').addEventListener('input', searchSubjects);
+      // Setup search
+      setupSearch();
       
-      // Set up view toggle
-      document.querySelectorAll('.view-btn').forEach(btn => {
-        btn.addEventListener('click', () => toggleView(btn.dataset.view));
-      });
+      // Check for saved dark mode preference
+      if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark');
+        document.querySelector('.mode-toggle i').className = 'fas fa-sun';
+      }
       
-      // Set up category tabs
-      document.querySelectorAll('.category-tab').forEach(tab => {
-        tab.addEventListener('click', function() {
-          filterSubjects(this.dataset.category);
+      // View toggle functionality
+      const viewButtons = document.querySelectorAll('.view-btn');
+      viewButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const view = this.dataset.view;
+          
+          // Update active button
+          viewButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Show selected view
+          if (view === 'cards') {
+            document.getElementById('subjectGrid').style.display = 'grid';
+            document.getElementById('subjectList').style.display = 'none';
+          } else {
+            document.getElementById('subjectGrid').style.display = 'none';
+            document.getElementById('subjectList').style.display = 'flex';
+          }
         });
       });
-    };
+      
+      // Category tabs functionality
+      const categoryTabs = document.querySelectorAll('.category-tab');
+      categoryTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          // Update active tab
+          categoryTabs.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Reload subjects with new category
+          loadSubjects();
+        });
+      });
+    });
   </script>
 </body>
 </html>
